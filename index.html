@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0a0a0a">
-    <title>Skaistė Tasks</title>
+    <title>Skaiste Tasks</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,14 +14,13 @@
     <style>
         :root {
             --bg: #0a0a0a;
-            --surface: #161616;
-            --surface2: #1e1e1e;
-            --surface3: #282828;
-            --text: #f5f5f5;
-            --text2: #a0a0a0;
-            --text3: #666;
-            --border: #2a2a2a;
-            --done-text: #555;
+            --surface: #141414;
+            --surface2: #1c1c1c;
+            --surface3: #262626;
+            --text: #f2f2f2;
+            --text2: #999;
+            --text3: #5a5a5a;
+            --border: #222;
             --safe-top: env(safe-area-inset-top, 0px);
             --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
@@ -31,293 +30,273 @@
             background:var(--bg); color:var(--text);
             min-height:100dvh; overflow-x:hidden;
             padding-top:var(--safe-top);
-            padding-bottom:calc(80px + var(--safe-bottom));
+            padding-bottom:calc(76px + var(--safe-bottom));
         }
+
+        /* ── SVG ICONS ── */
+        .icon { display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .icon svg { width:100%; height:100%; }
 
         /* ── HEADER ── */
         .header {
-            padding:20px 20px 0;
-            position:sticky; top:0; z-index:100;
-            background:var(--bg);
-        }
-        .header-top {
+            padding:16px 20px 12px;
             display:flex; justify-content:space-between; align-items:center;
-            margin-bottom:16px;
         }
-        .header-greeting { font-size:13px; color:var(--text2); font-weight:500; letter-spacing:0.5px; text-transform:uppercase; }
-        .header-date { font-size:32px; font-weight:900; letter-spacing:-1px; line-height:1.1; margin-top:2px; }
-        .header-stats {
-            display:flex; gap:6px; align-items:center;
-        }
+        .header-left {}
+        .header-label { font-size:11px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:1px; }
+        .header-date { font-size:28px; font-weight:900; letter-spacing:-1px; line-height:1.15; margin-top:1px; }
+        .header-stats { display:flex; gap:6px; }
         .stat-pill {
-            background:var(--surface2); border-radius:20px; padding:6px 12px;
-            font-size:12px; font-weight:600; color:var(--text2);
+            background:var(--surface2); border-radius:20px; padding:5px 11px;
+            font-size:11px; font-weight:600; color:var(--text2);
             display:flex; align-items:center; gap:4px;
         }
         .stat-pill .num { color:var(--text); }
-
-        /* ── CALENDAR STRIP ── */
-        .cal-strip {
-            display:flex; gap:4px; padding:12px 20px 14px;
-            overflow-x:auto; scroll-snap-type:x mandatory;
-            -webkit-overflow-scrolling:touch;
-            scrollbar-width:none;
-        }
-        .cal-strip::-webkit-scrollbar { display:none; }
-        .cal-day {
-            flex:0 0 auto; scroll-snap-align:center;
-            width:52px; padding:10px 0;
-            border-radius:16px; text-align:center;
-            cursor:pointer; transition:all .2s;
-            background:transparent; border:1.5px solid transparent;
-        }
-        .cal-day:active { transform:scale(0.95); }
-        .cal-day .dow { font-size:11px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; }
-        .cal-day .dom { font-size:20px; font-weight:800; margin-top:2px; color:var(--text2); }
-        .cal-day .dots { display:flex; gap:3px; justify-content:center; margin-top:5px; min-height:6px; }
-        .cal-day .dot { width:5px; height:5px; border-radius:50%; }
-        .cal-day.today { border-color:var(--text3); }
-        .cal-day.today .dom { color:var(--text); }
-        .cal-day.selected { background:var(--text); }
-        .cal-day.selected .dow { color:#666; }
-        .cal-day.selected .dom { color:var(--bg); }
-        .cal-day.selected .dot { opacity:0.6; }
-        .cal-day.has-tasks .dom { color:var(--text); }
+        .stat-pill.overdue { color:#e05555; }
+        .stat-pill.overdue .num { color:#e05555; }
 
         /* ── MONTH NAV ── */
         .month-nav {
             display:flex; align-items:center; justify-content:space-between;
-            padding:0 20px; margin-bottom:4px;
+            padding:4px 20px 8px;
         }
-        .month-label { font-size:15px; font-weight:700; color:var(--text); }
+        .month-label { font-size:16px; font-weight:800; letter-spacing:-0.3px; }
         .month-arrows { display:flex; gap:4px; }
         .month-arrows button {
-            background:var(--surface2); border:none; color:var(--text);
-            width:34px; height:34px; border-radius:10px; font-size:16px;
+            background:var(--surface2); border:none; color:var(--text2);
+            width:32px; height:32px; border-radius:10px;
             cursor:pointer; display:flex; align-items:center; justify-content:center;
+            transition:background .15s;
         }
         .month-arrows button:active { background:var(--surface3); }
+        .month-arrows button svg { width:16px; height:16px; }
+        .btn-today {
+            font-size:11px; font-weight:700; color:var(--text);
+            background:var(--surface3); padding:6px 12px; border-radius:10px;
+            border:none; cursor:pointer; letter-spacing:0.3px;
+        }
+        .btn-today:active { opacity:0.7; }
+
+        /* ── MONTH GRID ── */
+        .month-grid { padding:0 12px 6px; }
+        .mg-header {
+            display:grid; grid-template-columns:repeat(7,1fr); gap:0;
+            padding:0 2px; margin-bottom:4px;
+        }
+        .mg-header span {
+            text-align:center; font-size:10px; font-weight:600;
+            color:var(--text3); text-transform:uppercase; letter-spacing:0.5px;
+            padding:4px 0;
+        }
+        .mg-body {
+            display:grid; grid-template-columns:repeat(7,1fr); gap:3px;
+        }
+        .mg-cell {
+            min-height:56px; border-radius:10px; padding:3px;
+            cursor:pointer; transition:background .15s;
+            background:var(--surface); position:relative;
+            overflow:hidden;
+        }
+        .mg-cell:active { background:var(--surface3); }
+        .mg-cell.other-month { background:transparent; opacity:0.3; }
+        .mg-cell.today .mg-num {
+            background:var(--text); color:var(--bg); border-radius:6px;
+            width:22px; height:22px; display:flex; align-items:center; justify-content:center;
+        }
+        .mg-cell.selected { outline:2px solid var(--text); outline-offset:-2px; }
+        .mg-num {
+            font-size:11px; font-weight:700; color:var(--text2);
+            padding:1px 3px; display:inline-flex;
+        }
+        .mg-cell.has-tasks .mg-num { color:var(--text); }
+        .mg-tasks { margin-top:1px; }
+        .mg-task {
+            font-size:7px; font-weight:600; line-height:1.1;
+            padding:1.5px 3px; border-radius:3px; margin-bottom:1px;
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+            color:#fff;
+        }
+        .mg-more { font-size:7px; color:var(--text3); padding:0 3px; font-weight:600; }
+
+        /* ── FILTER PILLS ── */
+        .filter-bar {
+            display:flex; gap:5px; padding:6px 16px 8px;
+            overflow-x:auto; scrollbar-width:none;
+        }
+        .filter-bar::-webkit-scrollbar { display:none; }
+        .filter-pill {
+            flex:0 0 auto; padding:6px 12px; border-radius:10px;
+            font-size:11px; font-weight:600; cursor:pointer;
+            background:var(--surface2); color:var(--text2);
+            border:none; transition:all .15s;
+            display:flex; align-items:center; gap:5px;
+        }
+        .filter-pill:active { transform:scale(0.95); }
+        .filter-pill.active { background:var(--text); color:var(--bg); }
+        .filter-pill .fp-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
 
         /* ── DAY VIEW ── */
-        .day-view { padding:0 16px 20px; }
+        .day-view { padding:0 16px 16px; }
         .day-header {
             display:flex; align-items:baseline; justify-content:space-between;
-            padding:16px 4px 10px; border-bottom:1px solid var(--border);
-            margin-bottom:12px;
+            padding:10px 2px 8px; border-bottom:1px solid var(--border);
+            margin-bottom:10px;
         }
-        .day-title { font-size:22px; font-weight:800; letter-spacing:-0.5px; }
+        .day-title { font-size:20px; font-weight:800; letter-spacing:-0.5px; }
         .day-total {
-            font-size:13px; font-weight:600; color:var(--text2);
-            display:flex; align-items:center; gap:6px;
+            font-size:12px; font-weight:600; color:var(--text2);
+            display:flex; align-items:center; gap:5px;
         }
-        .day-total .time-icon { font-size:14px; }
 
         /* ── TASK CARDS ── */
         .task-card {
-            background:var(--surface); border-radius:18px;
-            padding:16px; margin-bottom:10px;
-            display:flex; gap:14px; align-items:flex-start;
-            transition:all .3s ease; position:relative;
-            border:1px solid var(--border);
-            overflow:hidden;
+            background:var(--surface); border-radius:14px;
+            padding:14px; margin-bottom:8px;
+            display:flex; gap:12px; align-items:flex-start;
+            transition:all .25s ease; position:relative;
+            border:1px solid var(--border); overflow:hidden;
+            cursor:pointer;
         }
-        .task-card.done {
-            opacity:0.45; background:var(--surface);
+        .task-card::before {
+            content:''; position:absolute; left:0; top:0; bottom:0;
+            width:3.5px; border-radius:3px 0 0 3px;
         }
-        .task-card.done .task-title { text-decoration:line-through; color:var(--done-text); }
-        .task-card.done .task-desc { color:var(--done-text); }
+        .task-card.done { opacity:0.4; }
+        .task-card.done .task-title { text-decoration:line-through; color:var(--text3); }
+        .task-card.done .task-desc { color:var(--text3); }
 
         .task-check {
-            flex:0 0 26px; height:26px; border-radius:50%;
-            border:2.5px solid var(--text3); background:transparent;
+            flex:0 0 24px; height:24px; border-radius:50%;
+            border:2px solid var(--text3); background:transparent;
             cursor:pointer; display:flex; align-items:center; justify-content:center;
-            transition:all .25s; margin-top:1px;
+            transition:all .2s; margin-top:1px;
         }
         .task-check:active { transform:scale(0.85); }
-        .task-check svg { opacity:0; transition:opacity .2s; }
-        .task-card.done .task-check { border-color:transparent; }
-        .task-card.done .task-check svg { opacity:1; }
+        .task-check .check-svg { opacity:0; transition:opacity .15s; }
+        .task-card.done .task-check .check-svg { opacity:1; }
 
         .task-body { flex:1; min-width:0; }
-        .task-meta {
-            display:flex; align-items:center; gap:8px;
-            margin-bottom:6px; flex-wrap:wrap;
-        }
+        .task-meta { display:flex; align-items:center; gap:6px; margin-bottom:4px; flex-wrap:wrap; }
         .task-project {
-            font-size:11px; font-weight:700; padding:3px 8px;
-            border-radius:6px; text-transform:uppercase; letter-spacing:0.5px;
+            font-size:10px; font-weight:700; padding:2px 7px;
+            border-radius:5px; text-transform:uppercase; letter-spacing:0.4px;
         }
         .task-type {
-            font-size:11px; font-weight:600; color:var(--text3);
-            text-transform:uppercase; letter-spacing:0.5px;
+            font-size:10px; font-weight:600; color:var(--text3);
+            text-transform:uppercase; letter-spacing:0.4px;
         }
-        .task-title {
-            font-size:15px; font-weight:700; line-height:1.35;
-            margin-bottom:4px; transition:all .3s;
-        }
-        .task-desc {
-            font-size:13px; color:var(--text2); line-height:1.4;
-            transition:all .3s;
-        }
-        .task-footer {
-            display:flex; align-items:center; gap:10px;
-            margin-top:10px;
-        }
-        .task-duration {
-            display:flex; align-items:center; gap:4px;
-            font-size:12px; font-weight:600; color:var(--text2);
-            background:var(--surface2); padding:4px 10px; border-radius:8px;
-        }
-        .task-device {
-            display:flex; align-items:center; gap:4px;
-            font-size:12px; font-weight:600; color:var(--text2);
-            background:var(--surface2); padding:4px 10px; border-radius:8px;
-        }
-        .device-icon { font-size:14px; }
-
-        /* ── OVERDUE BADGE ── */
         .overdue-badge {
-            font-size:10px; font-weight:700; color:#ff6b6b;
-            background:rgba(255,107,107,0.12); padding:2px 8px;
-            border-radius:6px; text-transform:uppercase; letter-spacing:0.5px;
+            font-size:9px; font-weight:700; color:#e05555;
+            background:rgba(224,85,85,0.12); padding:2px 6px;
+            border-radius:5px; text-transform:uppercase; letter-spacing:0.4px;
         }
+        .task-title { font-size:14px; font-weight:700; line-height:1.3; margin-bottom:3px; }
+        .task-desc { font-size:12px; color:var(--text2); line-height:1.35; }
+        .task-footer { display:flex; align-items:center; gap:8px; margin-top:8px; }
+        .task-tag {
+            display:flex; align-items:center; gap:4px;
+            font-size:11px; font-weight:600; color:var(--text2);
+            background:var(--surface2); padding:3px 8px; border-radius:6px;
+        }
+        .task-tag .icon { width:13px; height:13px; }
 
         /* ── EMPTY STATE ── */
-        .empty-state {
-            text-align:center; padding:60px 20px;
-        }
-        .empty-icon { font-size:48px; margin-bottom:12px; }
-        .empty-title { font-size:18px; font-weight:800; margin-bottom:6px; }
-        .empty-sub { font-size:14px; color:var(--text3); }
+        .empty-state { text-align:center; padding:48px 20px; }
+        .empty-state .icon { width:40px; height:40px; margin:0 auto 10px; color:var(--text3); }
+        .empty-title { font-size:16px; font-weight:800; margin-bottom:4px; }
+        .empty-sub { font-size:13px; color:var(--text3); }
 
-        /* ── WEEK OVERVIEW ── */
-        .week-summary {
-            padding:0 16px 12px;
-        }
-        .week-summary-cards {
-            display:grid; grid-template-columns:1fr 1fr;
-            gap:10px;
-        }
+        /* ── PROJECTS VIEW ── */
+        .projects-view { padding:0 16px 16px; display:none; }
+        .section-title { font-size:16px; font-weight:800; padding:12px 2px 10px; letter-spacing:-0.3px; }
+        .summary-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
         .summary-card {
-            background:var(--surface); border-radius:16px;
-            padding:16px; border:1px solid var(--border);
+            background:var(--surface); border-radius:14px;
+            padding:14px; border:1px solid var(--border);
         }
-        .summary-card .sc-label { font-size:11px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; }
-        .summary-card .sc-value { font-size:28px; font-weight:900; margin-top:4px; letter-spacing:-1px; }
-        .summary-card .sc-sub { font-size:12px; color:var(--text2); margin-top:2px; }
+        .sc-label { font-size:10px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; }
+        .sc-value { font-size:26px; font-weight:900; margin-top:3px; letter-spacing:-1px; }
+        .sc-sub { font-size:11px; color:var(--text2); margin-top:1px; }
+        .sc-icon { display:flex; align-items:center; gap:5px; }
+        .sc-icon .icon { width:14px; height:14px; color:var(--text3); }
+
+        .project-card {
+            background:var(--surface); border-radius:14px;
+            padding:16px; margin-bottom:8px;
+            border:1px solid var(--border); cursor:pointer;
+            transition:all .15s; position:relative; overflow:hidden;
+        }
+        .project-card::before {
+            content:''; position:absolute; left:0; top:0; bottom:0; width:4px;
+        }
+        .project-card:active { transform:scale(0.98); }
+        .project-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+        .project-name { font-size:17px; font-weight:800; display:flex; align-items:center; gap:8px; }
+        .project-name .p-dot { width:10px; height:10px; border-radius:50%; }
+        .project-count { font-size:12px; font-weight:600; color:var(--text2); }
+        .project-bar { height:5px; border-radius:3px; background:var(--surface3); overflow:hidden; }
+        .project-bar-fill { height:100%; border-radius:3px; transition:width .5s ease; }
+        .project-stats { display:flex; gap:14px; margin-top:8px; }
+        .project-stat { font-size:11px; color:var(--text2); }
+        .project-stat strong { color:var(--text); }
 
         /* ── BOTTOM NAV ── */
         .bottom-nav {
             position:fixed; bottom:0; left:0; right:0;
-            background:rgba(10,10,10,0.92);
+            background:rgba(10,10,10,0.94);
             -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
             border-top:1px solid var(--border);
             display:flex; justify-content:space-around;
-            padding:10px 0 calc(10px + var(--safe-bottom));
+            padding:8px 0 calc(8px + var(--safe-bottom));
             z-index:200;
         }
         .nav-btn {
             background:none; border:none; color:var(--text3);
             display:flex; flex-direction:column; align-items:center;
-            gap:4px; cursor:pointer; padding:4px 16px;
-            font-family:inherit; transition:color .2s;
+            gap:3px; cursor:pointer; padding:4px 20px;
+            font-family:inherit; transition:color .15s;
         }
         .nav-btn.active { color:var(--text); }
-        .nav-btn svg { width:22px; height:22px; }
-        .nav-btn span { font-size:10px; font-weight:600; letter-spacing:0.3px; }
-
-        /* ── PROJECTS VIEW ── */
-        .projects-view { padding:0 16px 20px; display:none; }
-        .project-card {
-            background:var(--surface); border-radius:18px;
-            padding:20px; margin-bottom:12px;
-            border:1px solid var(--border); cursor:pointer;
-            transition:all .2s;
-        }
-        .project-card:active { transform:scale(0.98); }
-        .project-header {
-            display:flex; align-items:center; justify-content:space-between;
-            margin-bottom:12px;
-        }
-        .project-name { font-size:20px; font-weight:800; display:flex; align-items:center; gap:8px; }
-        .project-count { font-size:13px; font-weight:600; color:var(--text2); }
-        .project-bar {
-            height:6px; border-radius:3px; background:var(--surface3);
-            overflow:hidden;
-        }
-        .project-bar-fill { height:100%; border-radius:3px; transition:width .5s ease; }
-        .project-stats {
-            display:flex; gap:16px; margin-top:10px;
-        }
-        .project-stat { font-size:12px; color:var(--text2); }
-        .project-stat strong { color:var(--text); }
-
-        /* ── FILTER PILLS ── */
-        .filter-bar {
-            display:flex; gap:6px; padding:4px 16px 12px;
-            overflow-x:auto; scrollbar-width:none;
-        }
-        .filter-bar::-webkit-scrollbar { display:none; }
-        .filter-pill {
-            flex:0 0 auto; padding:7px 14px; border-radius:12px;
-            font-size:12px; font-weight:600; cursor:pointer;
-            background:var(--surface2); color:var(--text2);
-            border:1.5px solid transparent; transition:all .2s;
-        }
-        .filter-pill:active { transform:scale(0.95); }
-        .filter-pill.active { background:var(--text); color:var(--bg); }
+        .nav-btn .icon { width:20px; height:20px; }
+        .nav-btn span { font-size:10px; font-weight:600; letter-spacing:0.2px; }
 
         /* ── LOADING ── */
-        .loading {
-            display:flex; align-items:center; justify-content:center;
-            padding:80px 20px; flex-direction:column; gap:12px;
-        }
-        .spinner {
-            width:32px; height:32px; border:3px solid var(--surface3);
-            border-top-color:var(--text); border-radius:50%;
-            animation:spin .8s linear infinite;
-        }
+        .loading { display:flex; align-items:center; justify-content:center; padding:60px 20px; flex-direction:column; gap:10px; }
+        .spinner { width:28px; height:28px; border:2.5px solid var(--surface3); border-top-color:var(--text); border-radius:50%; animation:spin .7s linear infinite; }
         @keyframes spin { to { transform:rotate(360deg); } }
 
-        /* ── ANIMATIONS ── */
-        .task-card { animation:slideIn .3s ease both; }
-        @keyframes slideIn {
-            from { opacity:0; transform:translateY(12px); }
-            to { opacity:1; transform:translateY(0); }
-        }
-
+        /* ── ANIM ── */
+        .task-card { animation:fadeUp .25s ease both; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
         ::-webkit-scrollbar { width:0; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <div class="header-top">
-        <div>
-            <div class="header-greeting">Skaistė Tasks</div>
-            <div class="header-date" id="headerDate"></div>
-        </div>
-        <div class="header-stats" id="headerStats"></div>
+    <div class="header-left">
+        <div class="header-label">Skaiste Tasks</div>
+        <div class="header-date" id="headerDate"></div>
     </div>
+    <div class="header-stats" id="headerStats"></div>
 </div>
 
 <div class="month-nav">
     <div class="month-label" id="monthLabel"></div>
     <div class="month-arrows">
-        <button onclick="shiftWeek(-7)">&#8249;</button>
-        <button onclick="goToToday()">&#8226;</button>
-        <button onclick="shiftWeek(7)">&#8250;</button>
+        <button onclick="shiftMonth(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="btn-today" onclick="goToToday()">Siandien</button>
+        <button onclick="shiftMonth(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></button>
     </div>
 </div>
 
-<div class="cal-strip" id="calStrip"></div>
+<div class="month-grid" id="monthGrid"></div>
 
 <div class="filter-bar" id="filterBar"></div>
 
 <div class="day-view" id="dayView">
     <div class="loading" id="loadingState">
         <div class="spinner"></div>
-        <div style="font-size:13px;color:var(--text3)">Kraunama...</div>
     </div>
 </div>
 
@@ -325,126 +304,146 @@
 
 <nav class="bottom-nav">
     <button class="nav-btn active" onclick="switchView('calendar')" id="navCal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <span>Dienos</span>
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+        <span>Menuo</span>
     </button>
     <button class="nav-btn" onclick="switchView('projects')" id="navProj">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
         <span>Projektai</span>
     </button>
 </nav>
 
 <script>
+// ── SVG ICON TEMPLATES ──
+const ICONS = {
+    clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    laptop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="2" y1="20" x2="22" y2="20"/></svg>',
+    phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>',
+    sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="16 10 11 15 8 12"/></svg>',
+};
+
+function icon(name, size) {
+    return `<span class="icon" style="width:${size||14}px;height:${size||14}px">${ICONS[name]}</span>`;
+}
+
+// ── STATE ──
 let DATA = null;
+let viewMonth = new Date().getMonth();
+let viewYear = new Date().getFullYear();
 let selectedDate = new Date();
-let weekStart = null;
 let currentView = 'calendar';
 let activeFilter = 'all';
-let doneIds = JSON.parse(localStorage.getItem('doneTasks2') || '{}');
+let doneIds = JSON.parse(localStorage.getItem('doneTasks3') || '{}');
 
-const LT_DAYS = ['Sek','Pir','Ant','Tre','Ket','Pen','Šeš'];
+const LT_DAYS = ['P','A','T','K','Pn','Š','S'];
 const LT_DAYS_FULL = ['Sekmadienis','Pirmadienis','Antradienis','Trečiadienis','Ketvirtadienis','Penktadienis','Šeštadienis'];
 const LT_MONTHS = ['Sausis','Vasaris','Kovas','Balandis','Gegužė','Birželis','Liepa','Rugpjūtis','Rugsėjis','Spalis','Lapkritis','Gruodis'];
 
 init();
 
 async function init() {
-    setWeekFromDate(selectedDate);
     try {
         const r = await fetch('tasks.json?v=' + Date.now());
         DATA = await r.json();
     } catch {
-        document.getElementById('loadingState').innerHTML = '<div class="empty-icon">⚠️</div><div style="color:var(--text3)">Nepavyko užkrauti</div>';
+        document.getElementById('loadingState').innerHTML = '<div class="empty-title" style="color:var(--text3)">Nepavyko uzkrauti</div>';
         return;
     }
     render();
 }
 
-function setWeekFromDate(d) {
-    const day = d.getDay();
-    const monday = new Date(d);
-    monday.setDate(d.getDate() - ((day + 6) % 7));
-    weekStart = monday;
-}
-
 function fmt(d) {
     return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
-
-function isToday(d) { return fmt(d) === fmt(new Date()); }
-function sameDay(a,b) { return fmt(a) === fmt(b); }
+function fmtYMD(y,m,d) {
+    return y + '-' + String(m+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+}
+function isToday(y,m,d) { const t=new Date(); return t.getFullYear()===y && t.getMonth()===m && t.getDate()===d; }
+function isSel(y,m,d) { return selectedDate.getFullYear()===y && selectedDate.getMonth()===m && selectedDate.getDate()===d; }
 
 function render() {
     renderHeader();
-    renderCalStrip();
+    renderMonthGrid();
     renderFilters();
     if (currentView === 'calendar') renderDayView();
     else renderProjectsView();
 }
 
 function renderHeader() {
-    const today = new Date();
-    const monthName = LT_MONTHS[today.getMonth()];
-    document.getElementById('headerDate').textContent = monthName + ' ' + today.getDate();
-
+    const t = new Date();
+    document.getElementById('headerDate').textContent = LT_MONTHS[t.getMonth()] + ' ' + t.getDate();
     if (!DATA) return;
-    const todayStr = fmt(today);
-    const todayTasks = DATA.tasks.filter(t => t.date === todayStr);
-    const doneCnt = todayTasks.filter(t => doneIds[t.id]).length;
-    const overdue = DATA.tasks.filter(t => t.date < todayStr && !doneIds[t.id]).length;
-
-    let html = '';
-    if (todayTasks.length > 0) {
-        html += `<div class="stat-pill"><span class="num">${doneCnt}/${todayTasks.length}</span> šiandien</div>`;
-    }
-    if (overdue > 0) {
-        html += `<div class="stat-pill" style="color:#ff6b6b"><span class="num" style="color:#ff6b6b">${overdue}</span> vėluoja</div>`;
-    }
-    document.getElementById('headerStats').innerHTML = html;
+    const ts = fmt(t);
+    const todayTasks = DATA.tasks.filter(x => x.date === ts);
+    const dc = todayTasks.filter(x => doneIds[x.id]).length;
+    const overdue = DATA.tasks.filter(x => x.date < ts && !doneIds[x.id]).length;
+    let h = '';
+    if (todayTasks.length) h += `<div class="stat-pill"><span class="num">${dc}/${todayTasks.length}</span></div>`;
+    if (overdue) h += `<div class="stat-pill overdue"><span class="num">${overdue}</span> veluoja</div>`;
+    document.getElementById('headerStats').innerHTML = h;
 }
 
-function renderCalStrip() {
-    const strip = document.getElementById('calStrip');
-    let html = '';
-    const start = new Date(weekStart);
-    start.setDate(start.getDate() - 7);
+function renderMonthGrid() {
+    document.getElementById('monthLabel').textContent = LT_MONTHS[viewMonth] + ' ' + viewYear;
 
-    for (let i = 0; i < 21; i++) {
-        const d = new Date(start);
-        d.setDate(start.getDate() + i);
-        const sel = sameDay(d, selectedDate);
-        const today = isToday(d);
-        const dateStr = fmt(d);
+    const first = new Date(viewYear, viewMonth, 1);
+    const startDow = (first.getDay() + 6) % 7; // Mon=0
+    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+    const prevDays = new Date(viewYear, viewMonth, 0).getDate();
 
-        let dots = '';
-        if (DATA) {
-            const dayProjects = [...new Set(DATA.tasks.filter(t => t.date === dateStr).map(t => t.project))];
-            dots = dayProjects.slice(0, 3).map(p =>
-                `<div class="dot" style="background:${DATA.projects[p].color}"></div>`
-            ).join('');
+    let html = '<div class="mg-header">';
+    LT_DAYS.forEach(d => html += `<span>${d}</span>`);
+    html += '</div><div class="mg-body">';
+
+    // Previous month fill
+    for (let i = startDow - 1; i >= 0; i--) {
+        const day = prevDays - i;
+        html += `<div class="mg-cell other-month"><span class="mg-num">${day}</span></div>`;
+    }
+
+    // Current month
+    for (let d = 1; d <= daysInMonth; d++) {
+        const dateStr = fmtYMD(viewYear, viewMonth, d);
+        const today = isToday(viewYear, viewMonth, d);
+        const sel = isSel(viewYear, viewMonth, d);
+        const dayTasks = DATA ? DATA.tasks.filter(t => t.date === dateStr) : [];
+        const hasTasks = dayTasks.length > 0;
+
+        let cls = 'mg-cell';
+        if (today) cls += ' today';
+        if (sel) cls += ' selected';
+        if (hasTasks) cls += ' has-tasks';
+
+        let taskHtml = '';
+        if (dayTasks.length > 0) {
+            const show = dayTasks.slice(0, 2);
+            show.forEach(t => {
+                const p = DATA.projects[t.project];
+                const done = doneIds[t.id];
+                const opacity = done ? '0.4' : '1';
+                taskHtml += `<div class="mg-task" style="background:${p.color};opacity:${opacity}">${t.title}</div>`;
+            });
+            if (dayTasks.length > 2) {
+                taskHtml += `<div class="mg-more">+${dayTasks.length - 2}</div>`;
+            }
         }
 
-        const hasTasks = DATA ? DATA.tasks.some(t => t.date === dateStr) : false;
-        const classes = ['cal-day'];
-        if (sel) classes.push('selected');
-        if (today && !sel) classes.push('today');
-        if (hasTasks) classes.push('has-tasks');
-
-        html += `<div class="${classes.join(' ')}" onclick="selectDate('${dateStr}')">
-            <div class="dow">${LT_DAYS[d.getDay()]}</div>
-            <div class="dom">${d.getDate()}</div>
-            <div class="dots">${dots}</div>
+        html += `<div class="${cls}" onclick="selectDate(${viewYear},${viewMonth},${d})">
+            <span class="mg-num">${d}</span>
+            <div class="mg-tasks">${taskHtml}</div>
         </div>`;
     }
-    strip.innerHTML = html;
 
-    document.getElementById('monthLabel').textContent =
-        LT_MONTHS[selectedDate.getMonth()] + ' ' + selectedDate.getFullYear();
+    // Next month fill
+    const totalCells = startDow + daysInMonth;
+    const remaining = (7 - (totalCells % 7)) % 7;
+    for (let i = 1; i <= remaining; i++) {
+        html += `<div class="mg-cell other-month"><span class="mg-num">${i}</span></div>`;
+    }
 
-    requestAnimationFrame(() => {
-        const selEl = strip.querySelector('.selected');
-        if (selEl) selEl.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
-    });
+    html += '</div>';
+    document.getElementById('monthGrid').innerHTML = html;
 }
 
 function renderFilters() {
@@ -452,17 +451,19 @@ function renderFilters() {
     if (!DATA) { bar.innerHTML = ''; return; }
 
     const filters = [
-        { key:'all', label:'Visos' },
-        { key:'phone', label:'📱 Telefonas' },
-        { key:'computer', label:'💻 Kompiuteris' }
+        { key:'all', label:'Visos', dot:null },
+        { key:'phone', label:'Telefonas', dot:null, icon:'phone' },
+        { key:'computer', label:'Kompiuteris', dot:null, icon:'laptop' },
     ];
-    Object.keys(DATA.projects).forEach(k => {
-        filters.push({ key:k, label:DATA.projects[k].emoji + ' ' + DATA.projects[k].name });
+    Object.entries(DATA.projects).forEach(([k,v]) => {
+        filters.push({ key:k, label:v.name, dot:v.color });
     });
 
-    bar.innerHTML = filters.map(f =>
-        `<div class="filter-pill ${activeFilter === f.key ? 'active' : ''}" onclick="setFilter('${f.key}')">${f.label}</div>`
-    ).join('');
+    bar.innerHTML = filters.map(f => {
+        const dotHtml = f.dot ? `<span class="fp-dot" style="background:${f.dot}"></span>` : '';
+        const iconHtml = f.icon ? icon(f.icon, 12) : '';
+        return `<div class="filter-pill ${activeFilter === f.key ? 'active' : ''}" onclick="setFilter('${f.key}')">${iconHtml}${dotHtml}${f.label}</div>`;
+    }).join('');
 }
 
 function renderDayView() {
@@ -473,62 +474,53 @@ function renderDayView() {
     const todayStr = fmt(new Date());
     let tasks = DATA.tasks.filter(t => t.date === dateStr);
     tasks = applyFilter(tasks);
+    tasks.sort((a,b) => (doneIds[a.id]?1:0) - (doneIds[b.id]?1:0));
 
-    tasks.sort((a,b) => {
-        const aDone = doneIds[a.id] ? 1 : 0;
-        const bDone = doneIds[b.id] ? 1 : 0;
-        return aDone - bDone;
-    });
-
-    const totalMin = tasks.reduce((s,t) => s + (doneIds[t.id] ? 0 : (t.duration || 0)), 0);
+    const totalMin = tasks.reduce((s,t) => s + (doneIds[t.id] ? 0 : (t.duration||0)), 0);
     const isOverdue = dateStr < todayStr;
 
-    if (tasks.length === 0) {
+    if (!tasks.length) {
         const dayName = LT_DAYS_FULL[selectedDate.getDay()];
-        container.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-icon">${isOverdue ? '✅' : '☀️'}</div>
-                <div class="empty-title">${isOverdue ? 'Jokių užduočių' : 'Laisva diena!'}</div>
-                <div class="empty-sub">${dayName} — jokių suplanuotų darbų</div>
-            </div>`;
+        container.innerHTML = `<div class="empty-state">
+            <div class="icon" style="width:40px;height:40px;margin:0 auto 10px;color:var(--text3)">${ICONS.sun}</div>
+            <div class="empty-title">Laisva diena</div>
+            <div class="empty-sub">${dayName}</div>
+        </div>`;
         return;
     }
 
     const dayName = LT_DAYS_FULL[selectedDate.getDay()];
-    const timeLabel = totalMin >= 60
-        ? Math.floor(totalMin/60) + 'h ' + (totalMin%60 > 0 ? totalMin%60 + 'min' : '')
-        : totalMin + ' min';
+    const tl = fmtTime(totalMin);
 
     let html = `<div class="day-header">
         <div class="day-title">${dayName}</div>
-        <div class="day-total">
-            <span class="time-icon">⏱</span> ~${timeLabel} liko
-        </div>
+        <div class="day-total">${icon('clock',14)} ~${tl} liko</div>
     </div>`;
 
-    tasks.forEach((t, i) => {
+    tasks.forEach((t,i) => {
         const p = DATA.projects[t.project];
         const done = doneIds[t.id];
-        const dur = t.duration || 0;
-        const durLabel = dur >= 60 ? Math.floor(dur/60) + 'h ' + (dur%60 > 0 ? dur%60 + 'min' : '') : dur + ' min';
+        const dur = fmtTime(t.duration||0);
         const showOverdue = isOverdue && !done;
+        const deviceIcon = t.device === 'computer' ? 'laptop' : 'phone';
+        const deviceName = t.device === 'computer' ? 'Mac' : 'iPhone';
 
-        html += `<div class="task-card ${done ? 'done' : ''}" style="animation-delay:${i * 0.04}s" onclick="toggleTask('${t.id}')">
-            <div style="position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px;background:${p.color}"></div>
-            <button class="task-check" style="border-color:${done ? 'transparent' : p.color};background:${done ? p.color : 'transparent'}" onclick="event.stopPropagation();toggleTask('${t.id}')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${done ? '#fff' : p.color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        html += `<div class="task-card ${done?'done':''}" style="animation-delay:${i*0.03}s" onclick="toggleTask('${t.id}')">
+            <div style="position:absolute;left:0;top:0;bottom:0;width:3.5px;background:${p.color};border-radius:3px 0 0 3px"></div>
+            <button class="task-check" style="border-color:${done?'transparent':p.color};background:${done?p.color:'transparent'}" onclick="event.stopPropagation();toggleTask('${t.id}')">
+                <svg class="check-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
             <div class="task-body">
                 <div class="task-meta">
-                    <span class="task-project" style="background:${p.color}22;color:${p.color}">${p.emoji} ${p.name}</span>
+                    <span class="task-project" style="background:${p.color}20;color:${p.color}">${p.name}</span>
                     <span class="task-type">${t.type}</span>
-                    ${showOverdue ? '<span class="overdue-badge">Vėluoja</span>' : ''}
+                    ${showOverdue ? '<span class="overdue-badge">Veluoja</span>' : ''}
                 </div>
                 <div class="task-title">${t.title}</div>
                 <div class="task-desc">${t.desc}</div>
                 <div class="task-footer">
-                    <div class="task-duration"><span class="time-icon">⏱</span> ${durLabel}</div>
-                    <div class="task-device"><span class="device-icon">${t.device === 'computer' ? '💻' : '📱'}</span> ${t.device === 'computer' ? 'Mac' : 'iPhone'}</div>
+                    <div class="task-tag">${icon('clock',13)} ${dur}</div>
+                    <div class="task-tag">${icon(deviceIcon,13)} ${deviceName}</div>
                 </div>
             </div>
         </div>`;
@@ -540,69 +532,53 @@ function renderDayView() {
 function renderProjectsView() {
     const container = document.getElementById('projectsView');
     if (!DATA) return;
-
     const todayStr = fmt(new Date());
-    let html = '';
 
-    // Summary cards
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekEnd.getDate() + 6);
-    const weekTasks = DATA.tasks.filter(t => t.date >= fmt(weekStart) && t.date <= fmt(weekEnd));
-    const weekDone = weekTasks.filter(t => doneIds[t.id]).length;
-    const phoneT = DATA.tasks.filter(t => !doneIds[t.id] && t.device === 'phone').length;
-    const compT = DATA.tasks.filter(t => !doneIds[t.id] && t.device === 'computer').length;
+    const allRemain = DATA.tasks.filter(t => !doneIds[t.id]);
+    const phoneT = allRemain.filter(t => t.device === 'phone').length;
+    const compT = allRemain.filter(t => t.device === 'computer').length;
+    const totalH = Math.round(allRemain.reduce((s,t) => s + (t.duration||0), 0) / 60);
 
-    html += `<div class="week-summary">
-        <div style="font-size:18px;font-weight:800;padding:16px 4px 12px">Apžvalga</div>
-        <div class="week-summary-cards">
-            <div class="summary-card">
-                <div class="sc-label">Šią savaitę</div>
-                <div class="sc-value">${weekDone}/${weekTasks.length}</div>
-                <div class="sc-sub">užduočių atlikta</div>
-            </div>
-            <div class="summary-card">
-                <div class="sc-label">Iš viso liko</div>
-                <div class="sc-value">${DATA.tasks.filter(t => !doneIds[t.id]).length}</div>
-                <div class="sc-sub">užduočių</div>
-            </div>
-            <div class="summary-card">
-                <div class="sc-label">📱 Telefonas</div>
-                <div class="sc-value">${phoneT}</div>
-                <div class="sc-sub">užduočių liko</div>
-            </div>
-            <div class="summary-card">
-                <div class="sc-label">💻 Kompiuteris</div>
-                <div class="sc-value">${compT}</div>
-                <div class="sc-sub">užduočių liko</div>
-            </div>
+    let html = `<div class="section-title">Apzvalga</div>
+    <div class="summary-grid">
+        <div class="summary-card">
+            <div class="sc-label">Liko uzduociu</div>
+            <div class="sc-value">${allRemain.length}</div>
         </div>
-    </div>`;
+        <div class="summary-card">
+            <div class="sc-label">Viso darbo</div>
+            <div class="sc-value">${totalH}h</div>
+        </div>
+        <div class="summary-card">
+            <div class="sc-icon">${icon('phone',14)}<span class="sc-label">Telefonas</span></div>
+            <div class="sc-value">${phoneT}</div>
+        </div>
+        <div class="summary-card">
+            <div class="sc-icon">${icon('laptop',14)}<span class="sc-label">Kompiuteris</span></div>
+            <div class="sc-value">${compT}</div>
+        </div>
+    </div>
+    <div class="section-title">Projektai</div>`;
 
-    // Project cards
     Object.entries(DATA.projects).forEach(([key, proj]) => {
         const tasks = DATA.tasks.filter(t => t.project === key);
         const done = tasks.filter(t => doneIds[t.id]).length;
         const total = tasks.length;
-        const pct = total > 0 ? Math.round(done/total*100) : 0;
+        const pct = total ? Math.round(done/total*100) : 0;
         const upcoming = tasks.filter(t => t.date >= todayStr && !doneIds[t.id]).length;
         const overdue = tasks.filter(t => t.date < todayStr && !doneIds[t.id]).length;
         const totalMin = tasks.filter(t => !doneIds[t.id]).reduce((s,t) => s + (t.duration||0), 0);
-        const timeLabel = totalMin >= 60
-            ? Math.floor(totalMin/60) + 'h ' + (totalMin%60 > 0 ? totalMin%60 + 'min' : '')
-            : totalMin + ' min';
 
-        html += `<div class="project-card" onclick="filterByProject('${key}')">
+        html += `<div class="project-card" style="border-left:4px solid ${proj.color}" onclick="filterByProject('${key}')">
             <div class="project-header">
-                <div class="project-name">${proj.emoji} ${proj.name}</div>
+                <div class="project-name"><span class="p-dot" style="background:${proj.color}"></span>${proj.name}</div>
                 <div class="project-count">${done}/${total}</div>
             </div>
-            <div class="project-bar">
-                <div class="project-bar-fill" style="width:${pct}%;background:${proj.color}"></div>
-            </div>
+            <div class="project-bar"><div class="project-bar-fill" style="width:${pct}%;background:${proj.color}"></div></div>
             <div class="project-stats">
                 <div class="project-stat"><strong>${upcoming}</strong> liko</div>
-                ${overdue > 0 ? `<div class="project-stat" style="color:#ff6b6b"><strong>${overdue}</strong> vėluoja</div>` : ''}
-                <div class="project-stat"><strong>${timeLabel}</strong> darbo</div>
+                ${overdue ? `<div class="project-stat" style="color:#e05555"><strong>${overdue}</strong> veluoja</div>` : ''}
+                <div class="project-stat"><strong>${fmtTime(totalMin)}</strong> darbo</div>
             </div>
         </div>`;
     });
@@ -610,36 +586,35 @@ function renderProjectsView() {
     container.innerHTML = html;
 }
 
-function selectDate(dateStr) {
-    const [y,m,d] = dateStr.split('-').map(Number);
-    selectedDate = new Date(y, m-1, d);
-    setWeekFromDate(selectedDate);
+// ── INTERACTIONS ──
+function selectDate(y,m,d) {
+    selectedDate = new Date(y,m,d);
+    viewYear = y; viewMonth = m;
     render();
 }
 
 function goToToday() {
-    selectedDate = new Date();
-    setWeekFromDate(selectedDate);
+    const t = new Date();
+    selectedDate = t;
+    viewYear = t.getFullYear(); viewMonth = t.getMonth();
     render();
 }
 
-function shiftWeek(days) {
-    selectedDate.setDate(selectedDate.getDate() + days);
-    setWeekFromDate(selectedDate);
+function shiftMonth(dir) {
+    viewMonth += dir;
+    if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+    if (viewMonth < 0) { viewMonth = 11; viewYear--; }
     render();
 }
 
 function toggleTask(id) {
     if (doneIds[id]) delete doneIds[id];
     else doneIds[id] = Date.now();
-    localStorage.setItem('doneTasks2', JSON.stringify(doneIds));
+    localStorage.setItem('doneTasks3', JSON.stringify(doneIds));
     render();
 }
 
-function setFilter(key) {
-    activeFilter = key;
-    render();
-}
+function setFilter(key) { activeFilter = key; render(); }
 
 function applyFilter(tasks) {
     if (activeFilter === 'all') return tasks;
@@ -657,15 +632,14 @@ function switchView(view) {
     render();
 }
 
-function filterByProject(key) {
-    activeFilter = key;
-    switchView('calendar');
+function filterByProject(key) { activeFilter = key; switchView('calendar'); }
+
+function fmtTime(min) {
+    if (min >= 60) return Math.floor(min/60) + 'h' + (min%60 ? ' ' + min%60 + 'min' : '');
+    return min + 'min';
 }
 
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
-
 </body>
 </html>
