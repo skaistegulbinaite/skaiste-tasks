@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="lt">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -72,8 +72,9 @@
         .month-arrows button svg { width:16px; height:16px; }
         .btn-today {
             font-size:11px; font-weight:700; color:var(--text);
-            background:var(--surface3); padding:6px 12px; border-radius:10px;
+            background:var(--surface3); padding:6px 10px; border-radius:10px;
             border:none; cursor:pointer; letter-spacing:0.3px;
+            white-space:nowrap; flex-shrink:0;
         }
         .btn-today:active { opacity:0.7; }
 
@@ -127,7 +128,7 @@
         .filter-label {
             font-size:9px; font-weight:700; color:var(--text3);
             text-transform:uppercase; letter-spacing:0.8px;
-            flex:0 0 auto; width:52px;
+            flex:0 0 auto; min-width:52px;
         }
         .filter-pills {
             display:flex; gap:4px; overflow-x:auto; scrollbar-width:none;
@@ -287,6 +288,53 @@
         .nav-btn .icon { width:20px; height:20px; }
         .nav-btn span { font-size:10px; font-weight:600; letter-spacing:0.2px; }
 
+        /* ── ADD TASK BUTTON ── */
+        .add-btn {
+            position:fixed; bottom:calc(84px + var(--safe-bottom)); right:16px;
+            width:48px; height:48px; border-radius:50%;
+            background:var(--text); color:var(--bg); border:none;
+            font-size:26px; font-weight:300; cursor:pointer;
+            display:flex; align-items:center; justify-content:center;
+            box-shadow:0 4px 20px rgba(0,0,0,0.5); z-index:150;
+            transition:transform .15s;
+        }
+        .add-btn:active { transform:scale(0.9); }
+
+        /* ── ADD TASK MODAL ── */
+        .modal-overlay {
+            display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7);
+            z-index:300; flex-direction:column;
+            -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
+        }
+        .modal-overlay.open { display:flex; }
+        .modal-spacer { flex:0 0 auto; min-height:60px; }
+        .modal {
+            background:var(--surface); border-radius:20px 20px 0 0;
+            width:100%; max-width:500px; padding:16px 20px calc(16px + var(--safe-bottom));
+            animation:slideUp .25s ease;
+            margin:0 auto; flex:1; overflow-y:auto;
+            -webkit-overflow-scrolling:touch;
+        }
+        @keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+        .modal-title { font-size:16px; font-weight:800; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
+        .modal-close { background:none; border:none; color:var(--text3); font-size:22px; cursor:pointer; padding:4px; }
+        .modal-field { margin-bottom:10px; }
+        .modal-field label { font-size:10px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:4px; }
+        .modal-field input, .modal-field select, .modal-field textarea {
+            width:100%; background:var(--surface2); border:1px solid var(--border);
+            border-radius:10px; padding:9px 12px; color:var(--text);
+            font-family:inherit; font-size:14px; outline:none;
+        }
+        .modal-field textarea { resize:none; height:48px; }
+        .modal-field select { appearance:none; }
+        .modal-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .modal-submit {
+            width:100%; padding:12px; border-radius:12px; border:none;
+            background:var(--text); color:var(--bg); font-family:inherit;
+            font-size:14px; font-weight:700; cursor:pointer; margin-top:4px;
+        }
+        .modal-submit:active { opacity:0.8; }
+
         /* ── LOADING ── */
         .loading { display:flex; align-items:center; justify-content:center; padding:60px 20px; flex-direction:column; gap:10px; }
         .spinner { width:28px; height:28px; border:2.5px solid var(--surface3); border-top-color:var(--text); border-radius:50%; animation:spin .7s linear infinite; }
@@ -312,7 +360,7 @@
     <div class="month-label" id="monthLabel"></div>
     <div class="month-arrows">
         <button onclick="shiftMonth(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-        <button class="btn-today" onclick="goToToday()">Siandien</button>
+        <button class="btn-today" onclick="goToToday()">Today</button>
         <button onclick="shiftMonth(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></button>
     </div>
 </div>
@@ -329,14 +377,55 @@
 
 <div class="projects-view" id="projectsView"></div>
 
+<button class="add-btn" onclick="openAddTask()">+</button>
+
+<div class="modal-overlay" id="addModal">
+    <div class="modal-spacer" onclick="closeAddTask()"></div>
+    <div class="modal">
+        <div class="modal-title">New task <button class="modal-close" onclick="closeAddTask()">&times;</button></div>
+        <div class="modal-field">
+            <label>Title</label>
+            <input type="text" id="atTitle" placeholder="Task name...">
+        </div>
+        <div class="modal-field">
+            <label>Description</label>
+            <textarea id="atDesc" placeholder="Optional details..."></textarea>
+        </div>
+        <div class="modal-row">
+            <div class="modal-field">
+                <label>Project</label>
+                <select id="atProject"></select>
+            </div>
+            <div class="modal-field">
+                <label>Date</label>
+                <input type="date" id="atDate">
+            </div>
+        </div>
+        <div class="modal-row">
+            <div class="modal-field">
+                <label>Duration (min)</label>
+                <input type="number" id="atDuration" value="30" min="5" step="5">
+            </div>
+            <div class="modal-field">
+                <label>Device</label>
+                <select id="atDevice">
+                    <option value="phone">Phone</option>
+                    <option value="computer">Computer</option>
+                </select>
+            </div>
+        </div>
+        <button class="modal-submit" onclick="saveNewTask()">Add task</button>
+    </div>
+</div>
+
 <nav class="bottom-nav">
     <button class="nav-btn active" onclick="switchView('calendar')" id="navCal">
         <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
-        <span>Menuo</span>
+        <span>Month</span>
     </button>
     <button class="nav-btn" onclick="switchView('projects')" id="navProj">
         <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
-        <span>Projektai</span>
+        <span>Projects</span>
     </button>
 </nav>
 
@@ -363,9 +452,9 @@ let currentView = 'calendar';
 let activeFilter = 'all';
 let doneIds = JSON.parse(localStorage.getItem('doneTasks3') || '{}');
 
-const LT_DAYS = ['P','A','T','K','Pn','Š','S'];
-const LT_DAYS_FULL = ['Sekmadienis','Pirmadienis','Antradienis','Trečiadienis','Ketvirtadienis','Penktadienis','Šeštadienis'];
-const LT_MONTHS = ['Sausis','Vasaris','Kovas','Balandis','Gegužė','Birželis','Liepa','Rugpjūtis','Rugsėjis','Spalis','Lapkritis','Gruodis'];
+const LT_DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const LT_DAYS_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const LT_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 init();
 
@@ -373,8 +462,9 @@ async function init() {
     try {
         const r = await fetch('tasks.json?v=' + Date.now());
         DATA = await r.json();
+        loadCustomTasks();
     } catch {
-        document.getElementById('loadingState').innerHTML = '<div class="empty-title" style="color:var(--text3)">Nepavyko uzkrauti</div>';
+        document.getElementById('loadingState').innerHTML = '<div class="empty-title" style="color:var(--text3)">Failed to load</div>';
         return;
     }
     render();
@@ -407,7 +497,7 @@ function renderHeader() {
     const overdue = DATA.tasks.filter(x => x.date < ts && !doneIds[x.id]).length;
     let h = '';
     if (todayTasks.length) h += `<div class="stat-pill"><span class="num">${dc}/${todayTasks.length}</span></div>`;
-    if (overdue) h += `<div class="stat-pill overdue"><span class="num">${overdue}</span> veluoja</div>`;
+    if (overdue) h += `<div class="stat-pill overdue"><span class="num">${overdue}</span> overdue</div>`;
     document.getElementById('headerStats').innerHTML = h;
 }
 
@@ -482,9 +572,9 @@ function renderFilters() {
         return `<div class="filter-pill ${active}" onclick="setFilter('${key}')">${extra||''}${label}</div>`;
     };
 
-    let row1 = pill('all', 'Visos', '');
-    row1 += pill('phone', 'Telefonas', icon('phone', 12));
-    row1 += pill('computer', 'Kompiuteris', icon('laptop', 12));
+    let row1 = pill('all', 'All', '');
+    row1 += pill('phone', 'Phone', icon('phone', 12));
+    row1 += pill('computer', 'Computer', icon('laptop', 12));
 
     let row2 = '';
     Object.entries(DATA.projects).forEach(([k,v]) => {
@@ -493,11 +583,11 @@ function renderFilters() {
 
     bar.innerHTML = `
         <div class="filter-row">
-            <span class="filter-label">Tipas</span>
+            <span class="filter-label">Type</span>
             <div class="filter-pills">${row1}</div>
         </div>
         <div class="filter-row">
-            <span class="filter-label">Projektas</span>
+            <span class="filter-label">Project</span>
             <div class="filter-pills">${row2}</div>
         </div>`;
 }
@@ -519,7 +609,7 @@ function renderDayView() {
         const dayName = LT_DAYS_FULL[selectedDate.getDay()];
         container.innerHTML = `<div class="empty-state">
             <div class="icon" style="width:40px;height:40px;margin:0 auto 10px;color:var(--text3)">${ICONS.sun}</div>
-            <div class="empty-title">Laisva diena</div>
+            <div class="empty-title">Free day</div>
             <div class="empty-sub">${dayName}</div>
         </div>`;
         return;
@@ -530,7 +620,7 @@ function renderDayView() {
 
     let html = `<div class="day-header">
         <div class="day-title">${dayName}</div>
-        <div class="day-total">${icon('clock',14)} ~${tl} liko</div>
+        <div class="day-total">${icon('clock',14)} ~${tl} left</div>
     </div>`;
 
     tasks.forEach((t,i) => {
@@ -550,7 +640,7 @@ function renderDayView() {
                 <div class="task-meta">
                     <span class="task-project" style="background:${p.color}20;color:${p.color}">${p.name}</span>
                     <span class="task-type">${t.type}</span>
-                    ${showOverdue ? '<span class="overdue-badge">Veluoja</span>' : ''}
+                    ${showOverdue ? '<span class="overdue-badge">Overdue</span>' : ''}
                 </div>
                 <div class="task-title">${t.title}</div>
                 <div class="task-desc">${t.desc}</div>
@@ -575,26 +665,26 @@ function renderProjectsView() {
     const compT = allRemain.filter(t => t.device === 'computer').length;
     const totalH = Math.round(allRemain.reduce((s,t) => s + (t.duration||0), 0) / 60);
 
-    let html = `<div class="section-title">Apzvalga</div>
+    let html = `<div class="section-title">Overview</div>
     <div class="summary-grid">
         <div class="summary-card">
-            <div class="sc-label">Liko uzduociu</div>
+            <div class="sc-label">Tasks left</div>
             <div class="sc-value">${allRemain.length}</div>
         </div>
         <div class="summary-card">
-            <div class="sc-label">Viso darbo</div>
+            <div class="sc-label">Total work</div>
             <div class="sc-value">${totalH}h</div>
         </div>
         <div class="summary-card">
-            <div class="sc-icon">${icon('phone',14)}<span class="sc-label">Telefonas</span></div>
+            <div class="sc-icon">${icon('phone',14)}<span class="sc-label">Phone</span></div>
             <div class="sc-value">${phoneT}</div>
         </div>
         <div class="summary-card">
-            <div class="sc-icon">${icon('laptop',14)}<span class="sc-label">Kompiuteris</span></div>
+            <div class="sc-icon">${icon('laptop',14)}<span class="sc-label">Computer</span></div>
             <div class="sc-value">${compT}</div>
         </div>
     </div>
-    <div class="section-title">Projektai</div>`;
+    <div class="section-title">Projects</div>`;
 
     Object.entries(DATA.projects).forEach(([key, proj]) => {
         const tasks = DATA.tasks.filter(t => t.project === key);
@@ -612,9 +702,9 @@ function renderProjectsView() {
             </div>
             <div class="project-bar"><div class="project-bar-fill" style="width:${pct}%;background:${proj.color}"></div></div>
             <div class="project-stats">
-                <div class="project-stat"><strong>${upcoming}</strong> liko</div>
-                ${overdue ? `<div class="project-stat" style="color:#e05555"><strong>${overdue}</strong> veluoja</div>` : ''}
-                <div class="project-stat"><strong>${fmtTime(totalMin)}</strong> darbo</div>
+                <div class="project-stat"><strong>${upcoming}</strong> left</div>
+                ${overdue ? `<div class="project-stat" style="color:#e05555"><strong>${overdue}</strong> overdue</div>` : ''}
+                <div class="project-stat"><strong>${fmtTime(totalMin)}</strong> work</div>
             </div>
         </div>`;
     });
@@ -677,6 +767,54 @@ function filterByProject(key) { activeFilter = key; switchView('calendar'); }
 function fmtTime(min) {
     if (min >= 60) return Math.floor(min/60) + 'h' + (min%60 ? ' ' + min%60 + 'min' : '');
     return min + 'min';
+}
+
+// ── MANUAL TASK CREATION ──
+let customTasks = JSON.parse(localStorage.getItem('customTasks') || '[]');
+
+function loadCustomTasks() {
+    if (DATA && customTasks.length) {
+        customTasks.forEach(t => {
+            if (!DATA.tasks.find(x => x.id === t.id)) DATA.tasks.push(t);
+        });
+    }
+}
+
+function openAddTask() {
+    const sel = document.getElementById('atProject');
+    if (DATA && sel.options.length === 0) {
+        Object.entries(DATA.projects).forEach(([k,v]) => {
+            sel.innerHTML += `<option value="${k}">${v.name}</option>`;
+        });
+    }
+    document.getElementById('atDate').value = fmt(selectedDate);
+    document.getElementById('addModal').classList.add('open');
+}
+
+function closeAddTask() {
+    document.getElementById('addModal').classList.remove('open');
+}
+
+function saveNewTask() {
+    const title = document.getElementById('atTitle').value.trim();
+    if (!title) return;
+    const task = {
+        id: 'c' + Date.now(),
+        date: document.getElementById('atDate').value,
+        project: document.getElementById('atProject').value,
+        title: title,
+        desc: document.getElementById('atDesc').value.trim(),
+        type: 'task',
+        duration: parseInt(document.getElementById('atDuration').value) || 30,
+        device: document.getElementById('atDevice').value
+    };
+    customTasks.push(task);
+    localStorage.setItem('customTasks', JSON.stringify(customTasks));
+    DATA.tasks.push(task);
+    document.getElementById('atTitle').value = '';
+    document.getElementById('atDesc').value = '';
+    closeAddTask();
+    render();
 }
 
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
