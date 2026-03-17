@@ -171,9 +171,24 @@
             content:''; position:absolute; left:0; top:0; bottom:0;
             width:3.5px; border-radius:3px 0 0 3px;
         }
-        .task-card.done { opacity:0.4; }
-        .task-card.done .task-title { text-decoration:line-through; color:var(--text3); }
-        .task-card.done .task-desc { color:var(--text3); }
+        .task-card.done {
+            opacity:0.5; padding:8px 12px;
+            gap:8px; align-items:center;
+        }
+        .task-card.done .task-title {
+            text-decoration:line-through; color:var(--text3);
+            font-size:12px; margin-bottom:0;
+        }
+        .task-card.done .task-meta,
+        .task-card.done .task-desc,
+        .task-card.done .task-footer { display:none; }
+        .task-card.done.expanded .task-meta,
+        .task-card.done.expanded .task-desc,
+        .task-card.done.expanded .task-footer { display:flex; }
+        .task-card.done.expanded {
+            padding:14px; gap:12px; align-items:flex-start;
+        }
+        .task-card.done.expanded .task-title { font-size:14px; margin-bottom:3px; }
 
         .task-check {
             flex:0 0 24px; height:24px; border-radius:50%;
@@ -181,6 +196,8 @@
             cursor:pointer; display:flex; align-items:center; justify-content:center;
             transition:all .2s; margin-top:1px;
         }
+        .task-card.done .task-check { flex:0 0 20px; height:20px; }
+        .task-card.done.expanded .task-check { flex:0 0 24px; height:24px; }
         .task-check:active { transform:scale(0.85); }
         .task-check .check-svg { opacity:0; transition:opacity .15s; }
         .task-card.done .task-check .check-svg { opacity:1; }
@@ -524,7 +541,7 @@ function renderDayView() {
         const deviceIcon = t.device === 'computer' ? 'laptop' : 'phone';
         const deviceName = t.device === 'computer' ? 'Mac' : 'iPhone';
 
-        html += `<div class="task-card ${done?'done':''}" style="animation-delay:${i*0.03}s" onclick="toggleTask('${t.id}')">
+        html += `<div class="task-card ${done?'done':''}" style="animation-delay:${i*0.03}s" onclick="${done ? `expandDone(this,'${t.id}')` : `toggleTask('${t.id}')`}">
             <div style="position:absolute;left:0;top:0;bottom:0;width:3.5px;background:${p.color};border-radius:3px 0 0 3px"></div>
             <button class="task-check" style="border-color:${done?'transparent':p.color};background:${done?p.color:'transparent'}" onclick="event.stopPropagation();toggleTask('${t.id}')">
                 <svg class="check-svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -631,6 +648,10 @@ function toggleTask(id) {
     else doneIds[id] = Date.now();
     localStorage.setItem('doneTasks3', JSON.stringify(doneIds));
     render();
+}
+
+function expandDone(el, id) {
+    el.classList.toggle('expanded');
 }
 
 function setFilter(key) { activeFilter = key; render(); }
