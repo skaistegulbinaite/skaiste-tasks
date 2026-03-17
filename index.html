@@ -2,592 +2,670 @@
 <html lang="lt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Skaistė Tasks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0a0a0a">
+    <title>Skaistė Tasks</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --bg: #0a0a0a;
-            --card: #141414;
-            --border: #1e1e1e;
-            --fg: #f0f0f0;
-            --dim: #666;
-            --done: #2a2a2a;
-            --accent: #68b2ff;
-            --safe-top: env(safe-area-inset-top, 20px);
-            --safe-bottom: env(safe-area-inset-bottom, 20px);
+            --surface: #161616;
+            --surface2: #1e1e1e;
+            --surface3: #282828;
+            --text: #f5f5f5;
+            --text2: #a0a0a0;
+            --text3: #666;
+            --border: #2a2a2a;
+            --done-text: #555;
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
-        html { background: var(--bg); }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--bg);
-            color: var(--fg);
-            min-height: 100dvh;
-            -webkit-font-smoothing: antialiased;
-            padding-top: var(--safe-top);
-            padding-bottom: calc(72px + var(--safe-bottom));
-            overflow-x: hidden;
+            font-family:'Inter',system-ui,-apple-system,sans-serif;
+            background:var(--bg); color:var(--text);
+            min-height:100dvh; overflow-x:hidden;
+            padding-top:var(--safe-top);
+            padding-bottom:calc(80px + var(--safe-bottom));
         }
 
-        /* ===== HEADER ===== */
+        /* ── HEADER ── */
         .header {
-            padding: 20px 20px 0;
-            margin-bottom: 8px;
+            padding:20px 20px 0;
+            position:sticky; top:0; z-index:100;
+            background:var(--bg);
         }
-        .header-greeting {
-            font-size: 14px;
-            color: var(--dim);
-            font-weight: 500;
+        .header-top {
+            display:flex; justify-content:space-between; align-items:center;
+            margin-bottom:16px;
         }
-        .header-date {
-            font-size: 28px;
-            font-weight: 900;
-            letter-spacing: -0.02em;
-            margin-top: 2px;
-        }
+        .header-greeting { font-size:13px; color:var(--text2); font-weight:500; letter-spacing:0.5px; text-transform:uppercase; }
+        .header-date { font-size:32px; font-weight:900; letter-spacing:-1px; line-height:1.1; margin-top:2px; }
         .header-stats {
-            display: flex;
-            gap: 16px;
-            margin-top: 12px;
-            font-size: 13px;
-            color: var(--dim);
+            display:flex; gap:6px; align-items:center;
         }
-        .header-stats strong {
-            color: var(--accent);
-            font-weight: 700;
+        .stat-pill {
+            background:var(--surface2); border-radius:20px; padding:6px 12px;
+            font-size:12px; font-weight:600; color:var(--text2);
+            display:flex; align-items:center; gap:4px;
         }
+        .stat-pill .num { color:var(--text); }
 
-        /* ===== TABS ===== */
-        .tabs {
-            display: flex;
-            gap: 0;
-            padding: 16px 20px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+        /* ── CALENDAR STRIP ── */
+        .cal-strip {
+            display:flex; gap:4px; padding:12px 20px 14px;
+            overflow-x:auto; scroll-snap-type:x mandatory;
+            -webkit-overflow-scrolling:touch;
+            scrollbar-width:none;
         }
-        .tabs::-webkit-scrollbar { display: none; }
-        .tab {
-            flex-shrink: 0;
-            padding: 8px 16px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--dim);
-            background: none;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-right: 8px;
+        .cal-strip::-webkit-scrollbar { display:none; }
+        .cal-day {
+            flex:0 0 auto; scroll-snap-align:center;
+            width:52px; padding:10px 0;
+            border-radius:16px; text-align:center;
+            cursor:pointer; transition:all .2s;
+            background:transparent; border:1.5px solid transparent;
         }
-        .tab.active {
-            background: var(--fg);
-            color: var(--bg);
-            border-color: var(--fg);
-        }
+        .cal-day:active { transform:scale(0.95); }
+        .cal-day .dow { font-size:11px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; }
+        .cal-day .dom { font-size:20px; font-weight:800; margin-top:2px; color:var(--text2); }
+        .cal-day .dots { display:flex; gap:3px; justify-content:center; margin-top:5px; min-height:6px; }
+        .cal-day .dot { width:5px; height:5px; border-radius:50%; }
+        .cal-day.today { border-color:var(--text3); }
+        .cal-day.today .dom { color:var(--text); }
+        .cal-day.selected { background:var(--text); }
+        .cal-day.selected .dow { color:#666; }
+        .cal-day.selected .dom { color:var(--bg); }
+        .cal-day.selected .dot { opacity:0.6; }
+        .cal-day.has-tasks .dom { color:var(--text); }
 
-        /* ===== SECTIONS ===== */
-        .section {
-            padding: 0 20px;
-            margin-bottom: 24px;
+        /* ── MONTH NAV ── */
+        .month-nav {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:0 20px; margin-bottom:4px;
         }
-        .section-title {
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            color: var(--dim);
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .month-label { font-size:15px; font-weight:700; color:var(--text); }
+        .month-arrows { display:flex; gap:4px; }
+        .month-arrows button {
+            background:var(--surface2); border:none; color:var(--text);
+            width:34px; height:34px; border-radius:10px; font-size:16px;
+            cursor:pointer; display:flex; align-items:center; justify-content:center;
         }
-        .section-count {
-            background: var(--border);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 11px;
-        }
+        .month-arrows button:active { background:var(--surface3); }
 
-        /* ===== TASK CARDS ===== */
-        .task {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 10px;
-            display: flex;
-            gap: 14px;
-            align-items: flex-start;
-            transition: all 0.3s ease;
-            -webkit-tap-highlight-color: transparent;
+        /* ── DAY VIEW ── */
+        .day-view { padding:0 16px 20px; }
+        .day-header {
+            display:flex; align-items:baseline; justify-content:space-between;
+            padding:16px 4px 10px; border-bottom:1px solid var(--border);
+            margin-bottom:12px;
         }
-        .task.done {
-            opacity: 0.4;
-            background: var(--done);
+        .day-title { font-size:22px; font-weight:800; letter-spacing:-0.5px; }
+        .day-total {
+            font-size:13px; font-weight:600; color:var(--text2);
+            display:flex; align-items:center; gap:6px;
         }
-        .task.done .task-title {
-            text-decoration: line-through;
-            color: var(--dim);
+        .day-total .time-icon { font-size:14px; }
+
+        /* ── TASK CARDS ── */
+        .task-card {
+            background:var(--surface); border-radius:18px;
+            padding:16px; margin-bottom:10px;
+            display:flex; gap:14px; align-items:flex-start;
+            transition:all .3s ease; position:relative;
+            border:1px solid var(--border);
+            overflow:hidden;
         }
+        .task-card.done {
+            opacity:0.45; background:var(--surface);
+        }
+        .task-card.done .task-title { text-decoration:line-through; color:var(--done-text); }
+        .task-card.done .task-desc { color:var(--done-text); }
+
         .task-check {
-            width: 24px;
-            height: 24px;
-            border: 2px solid var(--border);
-            border-radius: 50%;
-            flex-shrink: 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            margin-top: 1px;
+            flex:0 0 26px; height:26px; border-radius:50%;
+            border:2.5px solid var(--text3); background:transparent;
+            cursor:pointer; display:flex; align-items:center; justify-content:center;
+            transition:all .25s; margin-top:1px;
         }
-        .task.done .task-check {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-        .task.done .task-check::after {
-            content: '✓';
-            color: var(--bg);
-            font-size: 13px;
-            font-weight: 800;
-        }
-        .task-body { flex: 1; min-width: 0; }
+        .task-check:active { transform:scale(0.85); }
+        .task-check svg { opacity:0; transition:opacity .2s; }
+        .task-card.done .task-check { border-color:transparent; }
+        .task-card.done .task-check svg { opacity:1; }
+
+        .task-body { flex:1; min-width:0; }
         .task-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 4px;
+            display:flex; align-items:center; gap:8px;
+            margin-bottom:6px; flex-wrap:wrap;
         }
         .task-project {
-            font-size: 11px;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 6px;
-            letter-spacing: 0.04em;
+            font-size:11px; font-weight:700; padding:3px 8px;
+            border-radius:6px; text-transform:uppercase; letter-spacing:0.5px;
         }
-        .task-date-badge {
-            font-size: 11px;
-            color: var(--dim);
-            font-weight: 500;
+        .task-type {
+            font-size:11px; font-weight:600; color:var(--text3);
+            text-transform:uppercase; letter-spacing:0.5px;
         }
-        .task-type-badge {
-            font-size: 10px;
-            font-weight: 600;
-            padding: 1px 6px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-        .type-faq { background: #3b2667; color: #c9a0ff; }
-        .type-foto { background: #0f3a1e; color: #6ee7a0; }
-        .type-vieta { background: #3b2a0f; color: #fcd47a; }
-        .type-sezonas { background: #3b0f2a; color: #f9a8d4; }
-        .type-task { background: #0f2a3b; color: #68b2ff; }
         .task-title {
-            font-size: 15px;
-            font-weight: 700;
-            line-height: 1.3;
-            letter-spacing: -0.01em;
+            font-size:15px; font-weight:700; line-height:1.35;
+            margin-bottom:4px; transition:all .3s;
         }
         .task-desc {
-            font-size: 13px;
-            color: var(--dim);
-            margin-top: 4px;
-            line-height: 1.4;
+            font-size:13px; color:var(--text2); line-height:1.4;
+            transition:all .3s;
+        }
+        .task-footer {
+            display:flex; align-items:center; gap:10px;
+            margin-top:10px;
+        }
+        .task-duration {
+            display:flex; align-items:center; gap:4px;
+            font-size:12px; font-weight:600; color:var(--text2);
+            background:var(--surface2); padding:4px 10px; border-radius:8px;
+        }
+        .task-device {
+            display:flex; align-items:center; gap:4px;
+            font-size:12px; font-weight:600; color:var(--text2);
+            background:var(--surface2); padding:4px 10px; border-radius:8px;
+        }
+        .device-icon { font-size:14px; }
+
+        /* ── OVERDUE BADGE ── */
+        .overdue-badge {
+            font-size:10px; font-weight:700; color:#ff6b6b;
+            background:rgba(255,107,107,0.12); padding:2px 8px;
+            border-radius:6px; text-transform:uppercase; letter-spacing:0.5px;
         }
 
-        /* ===== EMPTY STATE ===== */
-        .empty {
-            text-align: center;
-            padding: 48px 20px;
-            color: var(--dim);
+        /* ── EMPTY STATE ── */
+        .empty-state {
+            text-align:center; padding:60px 20px;
         }
-        .empty-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-        }
-        .empty-text {
-            font-size: 15px;
-            font-weight: 600;
-        }
-        .empty-sub {
-            font-size: 13px;
-            margin-top: 4px;
-        }
+        .empty-icon { font-size:48px; margin-bottom:12px; }
+        .empty-title { font-size:18px; font-weight:800; margin-bottom:6px; }
+        .empty-sub { font-size:14px; color:var(--text3); }
 
-        /* ===== OVERDUE HIGHLIGHT ===== */
-        .task.overdue {
-            border-color: #4a1c1c;
+        /* ── WEEK OVERVIEW ── */
+        .week-summary {
+            padding:0 16px 12px;
         }
-        .task.overdue .task-date-badge {
-            color: #ff6b6b;
-            font-weight: 700;
+        .week-summary-cards {
+            display:grid; grid-template-columns:1fr 1fr;
+            gap:10px;
         }
+        .summary-card {
+            background:var(--surface); border-radius:16px;
+            padding:16px; border:1px solid var(--border);
+        }
+        .summary-card .sc-label { font-size:11px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; }
+        .summary-card .sc-value { font-size:28px; font-weight:900; margin-top:4px; letter-spacing:-1px; }
+        .summary-card .sc-sub { font-size:12px; color:var(--text2); margin-top:2px; }
 
-        /* ===== TODAY HIGHLIGHT ===== */
-        .task.today-task {
-            border-color: #1a3a5c;
-            background: #0d1f33;
-        }
-
-        /* ===== BOTTOM NAV ===== */
+        /* ── BOTTOM NAV ── */
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: calc(72px + var(--safe-bottom));
-            padding-bottom: var(--safe-bottom);
-            background: rgba(10,10,10,0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
+            position:fixed; bottom:0; left:0; right:0;
+            background:rgba(10,10,10,0.92);
+            -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+            border-top:1px solid var(--border);
+            display:flex; justify-content:space-around;
+            padding:10px 0 calc(10px + var(--safe-bottom));
+            z-index:200;
         }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            padding: 8px 16px;
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
+        .nav-btn {
+            background:none; border:none; color:var(--text3);
+            display:flex; flex-direction:column; align-items:center;
+            gap:4px; cursor:pointer; padding:4px 16px;
+            font-family:inherit; transition:color .2s;
         }
-        .nav-icon { font-size: 22px; }
-        .nav-label {
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--dim);
-            letter-spacing: 0.04em;
-        }
-        .nav-item.active .nav-label { color: var(--accent); }
+        .nav-btn.active { color:var(--text); }
+        .nav-btn svg { width:22px; height:22px; }
+        .nav-btn span { font-size:10px; font-weight:600; letter-spacing:0.3px; }
 
-        /* ===== PROGRESS BAR ===== */
-        .progress-wrap {
-            padding: 0 20px;
-            margin-bottom: 20px;
+        /* ── PROJECTS VIEW ── */
+        .projects-view { padding:0 16px 20px; display:none; }
+        .project-card {
+            background:var(--surface); border-radius:18px;
+            padding:20px; margin-bottom:12px;
+            border:1px solid var(--border); cursor:pointer;
+            transition:all .2s;
         }
-        .progress-bar {
-            height: 6px;
-            background: var(--border);
-            border-radius: 3px;
-            overflow: hidden;
+        .project-card:active { transform:scale(0.98); }
+        .project-header {
+            display:flex; align-items:center; justify-content:space-between;
+            margin-bottom:12px;
         }
-        .progress-fill {
-            height: 100%;
-            background: var(--accent);
-            border-radius: 3px;
-            transition: width 0.5s ease;
+        .project-name { font-size:20px; font-weight:800; display:flex; align-items:center; gap:8px; }
+        .project-count { font-size:13px; font-weight:600; color:var(--text2); }
+        .project-bar {
+            height:6px; border-radius:3px; background:var(--surface3);
+            overflow:hidden;
         }
-        .progress-text {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--dim);
-            margin-top: 6px;
+        .project-bar-fill { height:100%; border-radius:3px; transition:width .5s ease; }
+        .project-stats {
+            display:flex; gap:16px; margin-top:10px;
+        }
+        .project-stat { font-size:12px; color:var(--text2); }
+        .project-stat strong { color:var(--text); }
+
+        /* ── FILTER PILLS ── */
+        .filter-bar {
+            display:flex; gap:6px; padding:4px 16px 12px;
+            overflow-x:auto; scrollbar-width:none;
+        }
+        .filter-bar::-webkit-scrollbar { display:none; }
+        .filter-pill {
+            flex:0 0 auto; padding:7px 14px; border-radius:12px;
+            font-size:12px; font-weight:600; cursor:pointer;
+            background:var(--surface2); color:var(--text2);
+            border:1.5px solid transparent; transition:all .2s;
+        }
+        .filter-pill:active { transform:scale(0.95); }
+        .filter-pill.active { background:var(--text); color:var(--bg); }
+
+        /* ── LOADING ── */
+        .loading {
+            display:flex; align-items:center; justify-content:center;
+            padding:80px 20px; flex-direction:column; gap:12px;
+        }
+        .spinner {
+            width:32px; height:32px; border:3px solid var(--surface3);
+            border-top-color:var(--text); border-radius:50%;
+            animation:spin .8s linear infinite;
+        }
+        @keyframes spin { to { transform:rotate(360deg); } }
+
+        /* ── ANIMATIONS ── */
+        .task-card { animation:slideIn .3s ease both; }
+        @keyframes slideIn {
+            from { opacity:0; transform:translateY(12px); }
+            to { opacity:1; transform:translateY(0); }
         }
 
-        /* ===== WEEK VIEW ===== */
-        .week-strip {
-            display: flex;
-            gap: 4px;
-            padding: 0 20px 16px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-        .week-strip::-webkit-scrollbar { display: none; }
-        .week-day {
-            flex-shrink: 0;
-            width: 48px;
-            padding: 10px 0;
-            text-align: center;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .week-day-name {
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--dim);
-            text-transform: uppercase;
-        }
-        .week-day-num {
-            font-size: 18px;
-            font-weight: 800;
-            margin-top: 4px;
-        }
-        .week-day-dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            margin: 4px auto 0;
-        }
-        .week-day.active {
-            background: var(--accent);
-            color: var(--bg);
-        }
-        .week-day.active .week-day-name { color: var(--bg); }
-        .week-day.has-tasks .week-day-dot { background: var(--accent); }
-        .week-day.active .week-day-dot { background: var(--bg); }
-
-        /* ===== ANIMATIONS ===== */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .task { animation: fadeIn 0.3s ease forwards; }
+        ::-webkit-scrollbar { width:0; }
     </style>
 </head>
 <body>
 
-<div id="app"></div>
+<div class="header">
+    <div class="header-top">
+        <div>
+            <div class="header-greeting">Skaistė Tasks</div>
+            <div class="header-date" id="headerDate"></div>
+        </div>
+        <div class="header-stats" id="headerStats"></div>
+    </div>
+</div>
+
+<div class="month-nav">
+    <div class="month-label" id="monthLabel"></div>
+    <div class="month-arrows">
+        <button onclick="shiftWeek(-7)">&#8249;</button>
+        <button onclick="goToToday()">&#8226;</button>
+        <button onclick="shiftWeek(7)">&#8250;</button>
+    </div>
+</div>
+
+<div class="cal-strip" id="calStrip"></div>
+
+<div class="filter-bar" id="filterBar"></div>
+
+<div class="day-view" id="dayView">
+    <div class="loading" id="loadingState">
+        <div class="spinner"></div>
+        <div style="font-size:13px;color:var(--text3)">Kraunama...</div>
+    </div>
+</div>
+
+<div class="projects-view" id="projectsView"></div>
 
 <nav class="bottom-nav">
-    <div class="nav-item active" data-view="today" onclick="switchView('today')">
-        <span class="nav-icon">📋</span>
-        <span class="nav-label">Šiandien</span>
-    </div>
-    <div class="nav-item" data-view="week" onclick="switchView('week')">
-        <span class="nav-icon">📅</span>
-        <span class="nav-label">Savaitė</span>
-    </div>
-    <div class="nav-item" data-view="projects" onclick="switchView('projects')">
-        <span class="nav-icon">📁</span>
-        <span class="nav-label">Projektai</span>
-    </div>
+    <button class="nav-btn active" onclick="switchView('calendar')" id="navCal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Dienos</span>
+    </button>
+    <button class="nav-btn" onclick="switchView('projects')" id="navProj">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        <span>Projektai</span>
+    </button>
 </nav>
 
 <script>
 let DATA = null;
-let DONE = JSON.parse(localStorage.getItem('skTasks_done') || '{}');
-let currentView = 'today';
-let selectedDate = null;
+let selectedDate = new Date();
+let weekStart = null;
+let currentView = 'calendar';
+let activeFilter = 'all';
+let doneIds = JSON.parse(localStorage.getItem('doneTasks2') || '{}');
 
-const DAYS_LT = ['Sk','Pr','An','Tr','Kt','Pn','Št'];
-const MONTHS_LT = ['Sausio','Vasario','Kovo','Balandžio','Gegužės','Birželio','Liepos','Rugpjūčio','Rugsėjo','Spalio','Lapkričio','Gruodžio'];
+const LT_DAYS = ['Sek','Pir','Ant','Tre','Ket','Pen','Šeš'];
+const LT_DAYS_FULL = ['Sekmadienis','Pirmadienis','Antradienis','Trečiadienis','Ketvirtadienis','Penktadienis','Šeštadienis'];
+const LT_MONTHS = ['Sausis','Vasaris','Kovas','Balandis','Gegužė','Birželis','Liepa','Rugpjūtis','Rugsėjis','Spalis','Lapkritis','Gruodis'];
+
+init();
 
 async function init() {
+    setWeekFromDate(selectedDate);
     try {
-        const res = await fetch('tasks.json?v=' + Date.now());
-        DATA = await res.json();
-    } catch(e) {
-        document.getElementById('app').innerHTML = '<div class="empty"><div class="empty-icon">⚡</div><div class="empty-text">Nepavyko užkrauti</div><div class="empty-sub">Patikrink interneto ryšį</div></div>';
+        const r = await fetch('tasks.json?v=' + Date.now());
+        DATA = await r.json();
+    } catch {
+        document.getElementById('loadingState').innerHTML = '<div class="empty-icon">⚠️</div><div style="color:var(--text3)">Nepavyko užkrauti</div>';
         return;
     }
     render();
 }
 
-function today() {
-    return new Date().toISOString().split('T')[0];
+function setWeekFromDate(d) {
+    const day = d.getDay();
+    const monday = new Date(d);
+    monday.setDate(d.getDate() - ((day + 6) % 7));
+    weekStart = monday;
 }
 
-function formatDate(dateStr) {
-    const d = new Date(dateStr + 'T12:00:00');
-    return `${MONTHS_LT[d.getMonth()]} ${d.getDate()}`;
+function fmt(d) {
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
 
-function formatDay(dateStr) {
-    const d = new Date(dateStr + 'T12:00:00');
-    return DAYS_LT[d.getDay()];
+function isToday(d) { return fmt(d) === fmt(new Date()); }
+function sameDay(a,b) { return fmt(a) === fmt(b); }
+
+function render() {
+    renderHeader();
+    renderCalStrip();
+    renderFilters();
+    if (currentView === 'calendar') renderDayView();
+    else renderProjectsView();
 }
 
-function isOverdue(dateStr) {
-    return dateStr < today() && !DONE[getTaskById(dateStr)];
-}
+function renderHeader() {
+    const today = new Date();
+    const monthName = LT_MONTHS[today.getMonth()];
+    document.getElementById('headerDate').textContent = monthName + ' ' + today.getDate();
 
-function getTaskById(id) { return id; }
+    if (!DATA) return;
+    const todayStr = fmt(today);
+    const todayTasks = DATA.tasks.filter(t => t.date === todayStr);
+    const doneCnt = todayTasks.filter(t => doneIds[t.id]).length;
+    const overdue = DATA.tasks.filter(t => t.date < todayStr && !doneIds[t.id]).length;
 
-function toggleDone(id) {
-    if (DONE[id]) {
-        delete DONE[id];
-    } else {
-        DONE[id] = true;
+    let html = '';
+    if (todayTasks.length > 0) {
+        html += `<div class="stat-pill"><span class="num">${doneCnt}/${todayTasks.length}</span> šiandien</div>`;
     }
-    localStorage.setItem('skTasks_done', JSON.stringify(DONE));
+    if (overdue > 0) {
+        html += `<div class="stat-pill" style="color:#ff6b6b"><span class="num" style="color:#ff6b6b">${overdue}</span> vėluoja</div>`;
+    }
+    document.getElementById('headerStats').innerHTML = html;
+}
+
+function renderCalStrip() {
+    const strip = document.getElementById('calStrip');
+    let html = '';
+    const start = new Date(weekStart);
+    start.setDate(start.getDate() - 7);
+
+    for (let i = 0; i < 21; i++) {
+        const d = new Date(start);
+        d.setDate(start.getDate() + i);
+        const sel = sameDay(d, selectedDate);
+        const today = isToday(d);
+        const dateStr = fmt(d);
+
+        let dots = '';
+        if (DATA) {
+            const dayProjects = [...new Set(DATA.tasks.filter(t => t.date === dateStr).map(t => t.project))];
+            dots = dayProjects.slice(0, 3).map(p =>
+                `<div class="dot" style="background:${DATA.projects[p].color}"></div>`
+            ).join('');
+        }
+
+        const hasTasks = DATA ? DATA.tasks.some(t => t.date === dateStr) : false;
+        const classes = ['cal-day'];
+        if (sel) classes.push('selected');
+        if (today && !sel) classes.push('today');
+        if (hasTasks) classes.push('has-tasks');
+
+        html += `<div class="${classes.join(' ')}" onclick="selectDate('${dateStr}')">
+            <div class="dow">${LT_DAYS[d.getDay()]}</div>
+            <div class="dom">${d.getDate()}</div>
+            <div class="dots">${dots}</div>
+        </div>`;
+    }
+    strip.innerHTML = html;
+
+    document.getElementById('monthLabel').textContent =
+        LT_MONTHS[selectedDate.getMonth()] + ' ' + selectedDate.getFullYear();
+
+    requestAnimationFrame(() => {
+        const selEl = strip.querySelector('.selected');
+        if (selEl) selEl.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+    });
+}
+
+function renderFilters() {
+    const bar = document.getElementById('filterBar');
+    if (!DATA) { bar.innerHTML = ''; return; }
+
+    const filters = [
+        { key:'all', label:'Visos' },
+        { key:'phone', label:'📱 Telefonas' },
+        { key:'computer', label:'💻 Kompiuteris' }
+    ];
+    Object.keys(DATA.projects).forEach(k => {
+        filters.push({ key:k, label:DATA.projects[k].emoji + ' ' + DATA.projects[k].name });
+    });
+
+    bar.innerHTML = filters.map(f =>
+        `<div class="filter-pill ${activeFilter === f.key ? 'active' : ''}" onclick="setFilter('${f.key}')">${f.label}</div>`
+    ).join('');
+}
+
+function renderDayView() {
+    const container = document.getElementById('dayView');
+    if (!DATA) return;
+
+    const dateStr = fmt(selectedDate);
+    const todayStr = fmt(new Date());
+    let tasks = DATA.tasks.filter(t => t.date === dateStr);
+    tasks = applyFilter(tasks);
+
+    tasks.sort((a,b) => {
+        const aDone = doneIds[a.id] ? 1 : 0;
+        const bDone = doneIds[b.id] ? 1 : 0;
+        return aDone - bDone;
+    });
+
+    const totalMin = tasks.reduce((s,t) => s + (doneIds[t.id] ? 0 : (t.duration || 0)), 0);
+    const isOverdue = dateStr < todayStr;
+
+    if (tasks.length === 0) {
+        const dayName = LT_DAYS_FULL[selectedDate.getDay()];
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">${isOverdue ? '✅' : '☀️'}</div>
+                <div class="empty-title">${isOverdue ? 'Jokių užduočių' : 'Laisva diena!'}</div>
+                <div class="empty-sub">${dayName} — jokių suplanuotų darbų</div>
+            </div>`;
+        return;
+    }
+
+    const dayName = LT_DAYS_FULL[selectedDate.getDay()];
+    const timeLabel = totalMin >= 60
+        ? Math.floor(totalMin/60) + 'h ' + (totalMin%60 > 0 ? totalMin%60 + 'min' : '')
+        : totalMin + ' min';
+
+    let html = `<div class="day-header">
+        <div class="day-title">${dayName}</div>
+        <div class="day-total">
+            <span class="time-icon">⏱</span> ~${timeLabel} liko
+        </div>
+    </div>`;
+
+    tasks.forEach((t, i) => {
+        const p = DATA.projects[t.project];
+        const done = doneIds[t.id];
+        const dur = t.duration || 0;
+        const durLabel = dur >= 60 ? Math.floor(dur/60) + 'h ' + (dur%60 > 0 ? dur%60 + 'min' : '') : dur + ' min';
+        const showOverdue = isOverdue && !done;
+
+        html += `<div class="task-card ${done ? 'done' : ''}" style="animation-delay:${i * 0.04}s" onclick="toggleTask('${t.id}')">
+            <div style="position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px;background:${p.color}"></div>
+            <button class="task-check" style="border-color:${done ? 'transparent' : p.color};background:${done ? p.color : 'transparent'}" onclick="event.stopPropagation();toggleTask('${t.id}')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${done ? '#fff' : p.color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </button>
+            <div class="task-body">
+                <div class="task-meta">
+                    <span class="task-project" style="background:${p.color}22;color:${p.color}">${p.emoji} ${p.name}</span>
+                    <span class="task-type">${t.type}</span>
+                    ${showOverdue ? '<span class="overdue-badge">Vėluoja</span>' : ''}
+                </div>
+                <div class="task-title">${t.title}</div>
+                <div class="task-desc">${t.desc}</div>
+                <div class="task-footer">
+                    <div class="task-duration"><span class="time-icon">⏱</span> ${durLabel}</div>
+                    <div class="task-device"><span class="device-icon">${t.device === 'computer' ? '💻' : '📱'}</span> ${t.device === 'computer' ? 'Mac' : 'iPhone'}</div>
+                </div>
+            </div>
+        </div>`;
+    });
+
+    container.innerHTML = html;
+}
+
+function renderProjectsView() {
+    const container = document.getElementById('projectsView');
+    if (!DATA) return;
+
+    const todayStr = fmt(new Date());
+    let html = '';
+
+    // Summary cards
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 6);
+    const weekTasks = DATA.tasks.filter(t => t.date >= fmt(weekStart) && t.date <= fmt(weekEnd));
+    const weekDone = weekTasks.filter(t => doneIds[t.id]).length;
+    const phoneT = DATA.tasks.filter(t => !doneIds[t.id] && t.device === 'phone').length;
+    const compT = DATA.tasks.filter(t => !doneIds[t.id] && t.device === 'computer').length;
+
+    html += `<div class="week-summary">
+        <div style="font-size:18px;font-weight:800;padding:16px 4px 12px">Apžvalga</div>
+        <div class="week-summary-cards">
+            <div class="summary-card">
+                <div class="sc-label">Šią savaitę</div>
+                <div class="sc-value">${weekDone}/${weekTasks.length}</div>
+                <div class="sc-sub">užduočių atlikta</div>
+            </div>
+            <div class="summary-card">
+                <div class="sc-label">Iš viso liko</div>
+                <div class="sc-value">${DATA.tasks.filter(t => !doneIds[t.id]).length}</div>
+                <div class="sc-sub">užduočių</div>
+            </div>
+            <div class="summary-card">
+                <div class="sc-label">📱 Telefonas</div>
+                <div class="sc-value">${phoneT}</div>
+                <div class="sc-sub">užduočių liko</div>
+            </div>
+            <div class="summary-card">
+                <div class="sc-label">💻 Kompiuteris</div>
+                <div class="sc-value">${compT}</div>
+                <div class="sc-sub">užduočių liko</div>
+            </div>
+        </div>
+    </div>`;
+
+    // Project cards
+    Object.entries(DATA.projects).forEach(([key, proj]) => {
+        const tasks = DATA.tasks.filter(t => t.project === key);
+        const done = tasks.filter(t => doneIds[t.id]).length;
+        const total = tasks.length;
+        const pct = total > 0 ? Math.round(done/total*100) : 0;
+        const upcoming = tasks.filter(t => t.date >= todayStr && !doneIds[t.id]).length;
+        const overdue = tasks.filter(t => t.date < todayStr && !doneIds[t.id]).length;
+        const totalMin = tasks.filter(t => !doneIds[t.id]).reduce((s,t) => s + (t.duration||0), 0);
+        const timeLabel = totalMin >= 60
+            ? Math.floor(totalMin/60) + 'h ' + (totalMin%60 > 0 ? totalMin%60 + 'min' : '')
+            : totalMin + ' min';
+
+        html += `<div class="project-card" onclick="filterByProject('${key}')">
+            <div class="project-header">
+                <div class="project-name">${proj.emoji} ${proj.name}</div>
+                <div class="project-count">${done}/${total}</div>
+            </div>
+            <div class="project-bar">
+                <div class="project-bar-fill" style="width:${pct}%;background:${proj.color}"></div>
+            </div>
+            <div class="project-stats">
+                <div class="project-stat"><strong>${upcoming}</strong> liko</div>
+                ${overdue > 0 ? `<div class="project-stat" style="color:#ff6b6b"><strong>${overdue}</strong> vėluoja</div>` : ''}
+                <div class="project-stat"><strong>${timeLabel}</strong> darbo</div>
+            </div>
+        </div>`;
+    });
+
+    container.innerHTML = html;
+}
+
+function selectDate(dateStr) {
+    const [y,m,d] = dateStr.split('-').map(Number);
+    selectedDate = new Date(y, m-1, d);
+    setWeekFromDate(selectedDate);
     render();
+}
+
+function goToToday() {
+    selectedDate = new Date();
+    setWeekFromDate(selectedDate);
+    render();
+}
+
+function shiftWeek(days) {
+    selectedDate.setDate(selectedDate.getDate() + days);
+    setWeekFromDate(selectedDate);
+    render();
+}
+
+function toggleTask(id) {
+    if (doneIds[id]) delete doneIds[id];
+    else doneIds[id] = Date.now();
+    localStorage.setItem('doneTasks2', JSON.stringify(doneIds));
+    render();
+}
+
+function setFilter(key) {
+    activeFilter = key;
+    render();
+}
+
+function applyFilter(tasks) {
+    if (activeFilter === 'all') return tasks;
+    if (activeFilter === 'phone') return tasks.filter(t => t.device === 'phone');
+    if (activeFilter === 'computer') return tasks.filter(t => t.device === 'computer');
+    return tasks.filter(t => t.project === activeFilter);
 }
 
 function switchView(view) {
     currentView = view;
-    selectedDate = null;
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.querySelector(`.nav-item[data-view="${view}"]`).classList.add('active');
+    document.getElementById('dayView').style.display = view === 'calendar' ? 'block' : 'none';
+    document.getElementById('projectsView').style.display = view === 'projects' ? 'block' : 'none';
+    document.getElementById('navCal').classList.toggle('active', view === 'calendar');
+    document.getElementById('navProj').classList.toggle('active', view === 'projects');
     render();
 }
 
-function selectDate(dateStr) {
-    selectedDate = dateStr;
-    render();
+function filterByProject(key) {
+    activeFilter = key;
+    switchView('calendar');
 }
 
-function renderTask(task, showDate = false) {
-    const isDone = !!DONE[task.id];
-    const isToday = task.date === today();
-    const overdue = task.date < today() && !isDone;
-    const proj = DATA.projects[task.project];
-
-    return `
-        <div class="task ${isDone ? 'done' : ''} ${overdue ? 'overdue' : ''} ${isToday ? 'today-task' : ''}" style="animation-delay: ${Math.random() * 0.1}s">
-            <div class="task-check" onclick="toggleDone('${task.id}')"></div>
-            <div class="task-body">
-                <div class="task-meta">
-                    <span class="task-project" style="background:${proj.color}22;color:${proj.color}">${proj.emoji} ${proj.name}</span>
-                    ${task.type ? `<span class="task-type-badge type-${task.type}">${task.type}</span>` : ''}
-                    ${showDate ? `<span class="task-date-badge">${overdue ? '⚠️ ' : ''}${formatDate(task.date)}</span>` : ''}
-                </div>
-                <div class="task-title">${task.title}</div>
-                ${task.desc ? `<div class="task-desc">${task.desc}</div>` : ''}
-            </div>
-        </div>
-    `;
-}
-
-function render() {
-    if (!DATA) return;
-    const app = document.getElementById('app');
-
-    if (currentView === 'today') renderToday(app);
-    else if (currentView === 'week') renderWeek(app);
-    else if (currentView === 'projects') renderProjects(app);
-}
-
-function renderToday(app) {
-    const todayStr = today();
-    const d = new Date(todayStr + 'T12:00:00');
-
-    const todayTasks = DATA.tasks.filter(t => t.date === todayStr);
-    const overdueTasks = DATA.tasks.filter(t => t.date < todayStr && !DONE[t.id]);
-    const upcomingTasks = DATA.tasks.filter(t => t.date > todayStr).slice(0, 5);
-
-    const totalTasks = DATA.tasks.length;
-    const doneTasks = DATA.tasks.filter(t => DONE[t.id]).length;
-    const pct = Math.round((doneTasks / totalTasks) * 100);
-
-    let html = `
-        <div class="header">
-            <div class="header-greeting">Labas, Skaiste 👋</div>
-            <div class="header-date">${MONTHS_LT[d.getMonth()]} ${d.getDate()}, ${DAYS_LT[d.getDay()]}</div>
-            <div class="header-stats">
-                <span><strong>${todayTasks.length}</strong> šiandien</span>
-                ${overdueTasks.length ? `<span><strong style="color:#ff6b6b">${overdueTasks.length}</strong> vėluoja</span>` : ''}
-                <span><strong>${doneTasks}/${totalTasks}</strong> atlikta</span>
-            </div>
-        </div>
-        <div class="progress-wrap">
-            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-            <div class="progress-text"><span>${pct}% atlikta</span><span>${totalTasks - doneTasks} liko</span></div>
-        </div>
-    `;
-
-    if (overdueTasks.length) {
-        html += `<div class="section">
-            <div class="section-title">⚠️ Vėluoja <span class="section-count">${overdueTasks.length}</span></div>
-            ${overdueTasks.map(t => renderTask(t, true)).join('')}
-        </div>`;
-    }
-
-    if (todayTasks.length) {
-        html += `<div class="section">
-            <div class="section-title">Šiandien <span class="section-count">${todayTasks.length}</span></div>
-            ${todayTasks.map(t => renderTask(t)).join('')}
-        </div>`;
-    }
-
-    if (!todayTasks.length && !overdueTasks.length) {
-        html += `<div class="empty"><div class="empty-icon">✨</div><div class="empty-text">Šiandien nieko!</div><div class="empty-sub">Mėgaukis laisva diena</div></div>`;
-    }
-
-    if (upcomingTasks.length) {
-        html += `<div class="section">
-            <div class="section-title">Artėja</div>
-            ${upcomingTasks.map(t => renderTask(t, true)).join('')}
-        </div>`;
-    }
-
-    app.innerHTML = html;
-}
-
-function renderWeek(app) {
-    const todayStr = today();
-    const todayDate = new Date(todayStr + 'T12:00:00');
-    const startOfWeek = new Date(todayDate);
-    startOfWeek.setDate(todayDate.getDate() - todayDate.getDay() + 1); // Monday
-
-    let days = [];
-    for (let i = 0; i < 14; i++) {
-        const d = new Date(startOfWeek);
-        d.setDate(startOfWeek.getDate() + i);
-        const ds = d.toISOString().split('T')[0];
-        const hasTasks = DATA.tasks.some(t => t.date === ds);
-        days.push({ date: ds, day: d, hasTasks });
-    }
-
-    const sel = selectedDate || todayStr;
-    const dayTasks = DATA.tasks.filter(t => t.date === sel);
-
-    let html = `
-        <div class="header">
-            <div class="header-date">Savaitės vaizdas</div>
-        </div>
-        <div class="week-strip">
-            ${days.map(d => `
-                <div class="week-day ${d.date === sel ? 'active' : ''} ${d.hasTasks ? 'has-tasks' : ''}" onclick="selectDate('${d.date}')">
-                    <div class="week-day-name">${DAYS_LT[d.day.getDay()]}</div>
-                    <div class="week-day-num">${d.day.getDate()}</div>
-                    <div class="week-day-dot"></div>
-                </div>
-            `).join('')}
-        </div>
-        <div class="section">
-            <div class="section-title">${formatDate(sel)} <span class="section-count">${dayTasks.length}</span></div>
-            ${dayTasks.length ? dayTasks.map(t => renderTask(t)).join('') : '<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">Nieko šią dieną</div></div>'}
-        </div>
-    `;
-    app.innerHTML = html;
-}
-
-function renderProjects(app) {
-    let html = `<div class="header"><div class="header-date">Projektai</div></div>`;
-
-    for (const [key, proj] of Object.entries(DATA.projects)) {
-        const projTasks = DATA.tasks.filter(t => t.project === key);
-        const done = projTasks.filter(t => DONE[t.id]).length;
-        const total = projTasks.length;
-        if (total === 0) continue;
-        const pct = Math.round((done / total) * 100);
-        const upcoming = projTasks.filter(t => t.date >= today() && !DONE[t.id]).slice(0, 3);
-
-        html += `
-        <div class="section">
-            <div class="section-title">${proj.emoji} ${proj.name} <span class="section-count">${done}/${total}</span></div>
-            <div class="progress-wrap" style="padding:0;margin-bottom:12px">
-                <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${proj.color}"></div></div>
-            </div>
-            ${upcoming.map(t => renderTask(t, true)).join('')}
-            ${upcoming.length < projTasks.filter(t => !DONE[t.id]).length ? `<div style="font-size:12px;color:var(--dim);padding:8px 0;">+ ${projTasks.filter(t => !DONE[t.id]).length - upcoming.length} daugiau...</div>` : ''}
-        </div>`;
-    }
-
-    app.innerHTML = html;
-}
-
-// Service Worker Registration
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
 }
-
-init();
 </script>
+
 </body>
 </html>
