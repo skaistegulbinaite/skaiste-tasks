@@ -221,13 +221,24 @@
         }
         .task-title { font-size:14px; font-weight:700; line-height:1.3; margin-bottom:3px; }
         .task-desc { font-size:12px; color:var(--text2); line-height:1.35; }
-        .task-footer { display:flex; align-items:center; gap:8px; margin-top:8px; }
+        .task-footer { display:flex; align-items:center; gap:8px; margin-top:8px; flex-wrap:wrap; }
         .task-tag {
             display:flex; align-items:center; gap:4px;
             font-size:11px; font-weight:600; color:var(--text2);
             background:var(--surface2); padding:3px 8px; border-radius:6px;
         }
         .task-tag .icon { width:13px; height:13px; }
+
+        /* ── PRIORITY DOTS ── */
+        .priority-dots { display:flex; gap:3px; align-items:center; }
+        .priority-dots .p-dot {
+            width:6px; height:6px; border-radius:50%;
+        }
+        .priority-dots .p-dot.filled { background:var(--text); }
+        .priority-dots .p-dot.empty { background:var(--surface3); }
+        .priority-dots.p1 .p-dot.filled { background:#7ec8a0; }
+        .priority-dots.p2 .p-dot.filled { background:#f0c27a; }
+        .priority-dots.p3 .p-dot.filled { background:#e88a8a; }
 
         /* ── EMPTY STATE ── */
         .empty-state { text-align:center; padding:48px 20px; }
@@ -269,6 +280,46 @@
         .project-stat { font-size:11px; color:var(--text2); }
         .project-stat strong { color:var(--text); }
 
+        /* ── IDEAS VIEW ── */
+        .ideas-view { padding:0 16px 16px; display:none; }
+        .idea-input-wrap {
+            background:var(--surface); border:1px solid var(--border);
+            border-radius:14px; padding:12px; margin-bottom:12px;
+        }
+        .idea-textarea {
+            width:100%; background:transparent; border:none; color:var(--text);
+            font-family:inherit; font-size:14px; resize:none; outline:none;
+            min-height:60px;
+        }
+        .idea-textarea::placeholder { color:var(--text3); }
+        .idea-actions { display:flex; justify-content:flex-end; margin-top:8px; }
+        .idea-save-btn {
+            background:var(--text); color:var(--bg); border:none;
+            padding:7px 18px; border-radius:8px; font-family:inherit;
+            font-size:12px; font-weight:700; cursor:pointer;
+        }
+        .idea-save-btn:active { opacity:0.8; }
+        .idea-card {
+            background:var(--surface); border:1px solid var(--border);
+            border-radius:14px; padding:14px; margin-bottom:8px;
+            position:relative; animation:fadeUp .25s ease both;
+        }
+        .idea-text { font-size:13px; line-height:1.4; color:var(--text); white-space:pre-wrap; }
+        .idea-time { font-size:10px; color:var(--text3); margin-top:6px; }
+        .idea-delete {
+            position:absolute; top:10px; right:10px;
+            background:none; border:none; color:var(--text3);
+            font-size:16px; cursor:pointer; padding:4px;
+            line-height:1;
+        }
+        .idea-delete:active { color:var(--text); }
+        .idea-count-badge {
+            background:#e88a8a; color:#fff; font-size:8px; font-weight:700;
+            width:14px; height:14px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            position:absolute; top:-2px; right:-2px;
+        }
+
         /* ── BOTTOM NAV ── */
         .bottom-nav {
             position:fixed; bottom:0; left:0; right:0;
@@ -282,8 +333,9 @@
         .nav-btn {
             background:none; border:none; color:var(--text3);
             display:flex; flex-direction:column; align-items:center;
-            gap:3px; cursor:pointer; padding:4px 20px;
+            gap:3px; cursor:pointer; padding:4px 16px;
             font-family:inherit; transition:color .15s;
+            position:relative;
         }
         .nav-btn.active { color:var(--text); }
         .nav-btn .icon { width:20px; height:20px; }
@@ -329,6 +381,7 @@
         .modal-field textarea { resize:none; height:48px; }
         .modal-field select { appearance:none; }
         .modal-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .modal-row.triple { grid-template-columns:1fr 1fr 1fr; }
         .modal-submit {
             width:100%; padding:12px; border-radius:12px; border:none;
             background:var(--text); color:var(--bg); font-family:inherit;
@@ -378,7 +431,9 @@
 
 <div class="projects-view" id="projectsView"></div>
 
-<button class="add-btn" onclick="openAddTask()">+</button>
+<div class="ideas-view" id="ideasView"></div>
+
+<button class="add-btn" id="addBtn" onclick="handleAddBtn()">+</button>
 
 <div class="modal-overlay" id="addModal">
     <div class="modal-spacer" onclick="closeAddTask()"></div>
@@ -402,7 +457,7 @@
                 <input type="date" id="atDate">
             </div>
         </div>
-        <div class="modal-row">
+        <div class="modal-row triple">
             <div class="modal-field">
                 <label>Duration (min)</label>
                 <input type="number" id="atDuration" value="30" min="5" step="5">
@@ -412,6 +467,14 @@
                 <select id="atDevice">
                     <option value="phone">Phone</option>
                     <option value="computer">Computer</option>
+                </select>
+            </div>
+            <div class="modal-field">
+                <label>Priority</label>
+                <select id="atPriority">
+                    <option value="1">Low</option>
+                    <option value="2" selected>Medium</option>
+                    <option value="3">High</option>
                 </select>
             </div>
         </div>
@@ -427,6 +490,11 @@
     <button class="nav-btn" onclick="switchView('projects')" id="navProj">
         <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
         <span>Projects</span>
+    </button>
+    <button class="nav-btn" onclick="switchView('ideas')" id="navIdeas">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 4 12.7V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.3A7 7 0 0 1 12 2z"/><line x1="9" y1="21" x2="15" y2="21"/></svg></span>
+        <span>Ideas</span>
+        <div id="ideaBadge" style="display:none"></div>
     </button>
 </nav>
 
@@ -444,6 +512,15 @@ function icon(name, size) {
     return `<span class="icon" style="width:${size||14}px;height:${size||14}px">${ICONS[name]}</span>`;
 }
 
+function priorityDots(level) {
+    const cls = 'priority-dots p' + level;
+    let dots = '';
+    for (let i = 1; i <= 3; i++) {
+        dots += `<span class="p-dot ${i <= level ? 'filled' : 'empty'}"></span>`;
+    }
+    return `<span class="${cls}">${dots}</span>`;
+}
+
 // ── STATE ──
 let DATA = null;
 let viewMonth = new Date().getMonth();
@@ -451,7 +528,9 @@ let viewYear = new Date().getFullYear();
 let selectedDate = new Date();
 let currentView = 'calendar';
 let activeFilter = 'all';
+let priorityFilter = 'all';
 let doneIds = JSON.parse(localStorage.getItem('doneTasks3') || '{}');
+let ideas = JSON.parse(localStorage.getItem('skaiste_ideas') || '[]');
 
 const LT_DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const LT_DAYS_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -469,6 +548,7 @@ async function init() {
         return;
     }
     render();
+    updateIdeaBadge();
 }
 
 function fmt(d) {
@@ -485,7 +565,8 @@ function render() {
     renderMonthGrid();
     renderFilters();
     if (currentView === 'calendar') renderDayView();
-    else renderProjectsView();
+    else if (currentView === 'projects') renderProjectsView();
+    else if (currentView === 'ideas') renderIdeasView();
 }
 
 function renderHeader() {
@@ -506,7 +587,7 @@ function renderMonthGrid() {
     document.getElementById('monthLabel').textContent = LT_MONTHS[viewMonth] + ' ' + viewYear;
 
     const first = new Date(viewYear, viewMonth, 1);
-    const startDow = (first.getDay() + 6) % 7; // Mon=0
+    const startDow = (first.getDay() + 6) % 7;
     const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
     const prevDays = new Date(viewYear, viewMonth, 0).getDate();
 
@@ -514,13 +595,11 @@ function renderMonthGrid() {
     LT_DAYS.forEach(d => html += `<span>${d}</span>`);
     html += '</div><div class="mg-body">';
 
-    // Previous month fill
     for (let i = startDow - 1; i >= 0; i--) {
         const day = prevDays - i;
         html += `<div class="mg-cell other-month"><span class="mg-num">${day}</span></div>`;
     }
 
-    // Current month
     for (let d = 1; d <= daysInMonth; d++) {
         const dateStr = fmtYMD(viewYear, viewMonth, d);
         const today = isToday(viewYear, viewMonth, d);
@@ -553,7 +632,6 @@ function renderMonthGrid() {
         </div>`;
     }
 
-    // Next month fill
     const totalCells = startDow + daysInMonth;
     const remaining = (7 - (totalCells % 7)) % 7;
     for (let i = 1; i <= remaining; i++) {
@@ -573,6 +651,11 @@ function renderFilters() {
         return `<div class="filter-pill ${active}" onclick="setFilter('${key}')">${extra||''}${label}</div>`;
     };
 
+    const ppill = (key, label, extra) => {
+        const active = priorityFilter === key ? 'active' : '';
+        return `<div class="filter-pill ${active}" onclick="setPriorityFilter('${key}')">${extra||''}${label}</div>`;
+    };
+
     let row1 = pill('all', 'All', '');
     row1 += pill('phone', 'Phone', icon('phone', 12));
     row1 += pill('computer', 'Computer', icon('laptop', 12));
@@ -582,6 +665,11 @@ function renderFilters() {
         row2 += pill(k, v.name, `<span class="fp-dot" style="background:${v.color}"></span>`);
     });
 
+    let row3 = ppill('all', 'All', '');
+    row3 += ppill('3', 'High', priorityDots(3));
+    row3 += ppill('2', 'Medium', priorityDots(2));
+    row3 += ppill('1', 'Low', priorityDots(1));
+
     bar.innerHTML = `
         <div class="filter-row">
             <span class="filter-label">Type</span>
@@ -590,6 +678,10 @@ function renderFilters() {
         <div class="filter-row">
             <span class="filter-label">Project</span>
             <div class="filter-pills">${row2}</div>
+        </div>
+        <div class="filter-row">
+            <span class="filter-label">Priority</span>
+            <div class="filter-pills">${row3}</div>
         </div>`;
 }
 
@@ -601,7 +693,13 @@ function renderDayView() {
     const todayStr = fmt(new Date());
     let tasks = DATA.tasks.filter(t => t.date === dateStr);
     tasks = applyFilter(tasks);
-    tasks.sort((a,b) => (doneIds[a.id]?1:0) - (doneIds[b.id]?1:0));
+    // Sort: undone first, then by priority (high first), then done
+    tasks.sort((a,b) => {
+        const da = doneIds[a.id] ? 1 : 0;
+        const db = doneIds[b.id] ? 1 : 0;
+        if (da !== db) return da - db;
+        return (b.priority||2) - (a.priority||2);
+    });
 
     const totalMin = tasks.reduce((s,t) => s + (doneIds[t.id] ? 0 : (t.duration||0)), 0);
     const isOverdue = dateStr < todayStr;
@@ -624,13 +722,17 @@ function renderDayView() {
         <div class="day-total">${icon('clock',14)} ~${tl} left</div>
     </div>`;
 
-    tasks.forEach((t,i) => {
+    // Group by project for smart scheduling
+    const grouped = groupByProject(tasks);
+
+    grouped.forEach((t,i) => {
         const p = DATA.projects[t.project];
         const done = doneIds[t.id];
         const dur = fmtTime(t.duration||0);
         const showOverdue = isOverdue && !done;
         const deviceIcon = t.device === 'computer' ? 'laptop' : 'phone';
         const deviceName = t.device === 'computer' ? 'Mac' : 'iPhone';
+        const pri = t.priority || 2;
 
         html += `<div class="task-card ${done?'done':''}" style="animation-delay:${i*0.03}s" onclick="${done ? `expandDone(this,'${t.id}')` : `toggleTask('${t.id}')`}">
             <div style="position:absolute;left:0;top:0;bottom:0;width:3.5px;background:${p.color};border-radius:3px 0 0 3px"></div>
@@ -641,6 +743,7 @@ function renderDayView() {
                 <div class="task-meta">
                     <span class="task-project" style="background:${p.color}20;color:${p.color}">${p.name}</span>
                     <span class="task-type">${t.type}</span>
+                    ${priorityDots(pri)}
                     ${showOverdue ? '<span class="overdue-badge">Overdue</span>' : ''}
                 </div>
                 <div class="task-title">${t.title}</div>
@@ -654,6 +757,36 @@ function renderDayView() {
     });
 
     container.innerHTML = html;
+}
+
+// Smart scheduling: group tasks by project, keeping done at bottom
+function groupByProject(tasks) {
+    const undone = tasks.filter(t => !doneIds[t.id]);
+    const done = tasks.filter(t => doneIds[t.id]);
+
+    // Group undone by project
+    const projectGroups = {};
+    undone.forEach(t => {
+        if (!projectGroups[t.project]) projectGroups[t.project] = [];
+        projectGroups[t.project].push(t);
+    });
+
+    // Sort groups: biggest group first (main project), then by highest priority task
+    const sorted = Object.values(projectGroups).sort((a,b) => {
+        const maxA = Math.max(...a.map(t => t.priority||2));
+        const maxB = Math.max(...b.map(t => t.priority||2));
+        if (maxB !== maxA) return maxB - maxA;
+        return b.length - a.length;
+    });
+
+    // Within each group, sort by priority desc
+    const result = [];
+    sorted.forEach(group => {
+        group.sort((a,b) => (b.priority||2) - (a.priority||2));
+        result.push(...group);
+    });
+
+    return [...result, ...done];
 }
 
 function renderProjectsView() {
@@ -713,6 +846,74 @@ function renderProjectsView() {
     container.innerHTML = html;
 }
 
+// ── IDEAS VIEW ──
+function renderIdeasView() {
+    const container = document.getElementById('ideasView');
+
+    let html = `<div class="section-title">Capture ideas</div>
+    <div class="idea-input-wrap">
+        <textarea class="idea-textarea" id="ideaInput" placeholder="What's on your mind..."></textarea>
+        <div class="idea-actions">
+            <button class="idea-save-btn" onclick="saveIdea()">Save idea</button>
+        </div>
+    </div>`;
+
+    if (ideas.length === 0) {
+        html += `<div class="empty-state">
+            <div class="icon" style="width:40px;height:40px;margin:0 auto 10px;color:var(--text3)">${ICONS.sun}</div>
+            <div class="empty-title">No ideas yet</div>
+            <div class="empty-sub">Write down anything that comes to mind</div>
+        </div>`;
+    } else {
+        // Newest first
+        [...ideas].reverse().forEach((idea, i) => {
+            const date = new Date(idea.ts);
+            const timeStr = LT_MONTHS[date.getMonth()] + ' ' + date.getDate() + ', ' +
+                String(date.getHours()).padStart(2,'0') + ':' + String(date.getMinutes()).padStart(2,'0');
+            html += `<div class="idea-card" style="animation-delay:${i*0.03}s">
+                <button class="idea-delete" onclick="deleteIdea('${idea.id}')">&times;</button>
+                <div class="idea-text">${escHtml(idea.text)}</div>
+                <div class="idea-time">${timeStr}</div>
+            </div>`;
+        });
+    }
+
+    container.innerHTML = html;
+}
+
+function saveIdea() {
+    const input = document.getElementById('ideaInput');
+    const text = input.value.trim();
+    if (!text) return;
+    ideas.push({ id: 'i' + Date.now(), text, ts: Date.now() });
+    localStorage.setItem('skaiste_ideas', JSON.stringify(ideas));
+    input.value = '';
+    renderIdeasView();
+    updateIdeaBadge();
+}
+
+function deleteIdea(id) {
+    ideas = ideas.filter(i => i.id !== id);
+    localStorage.setItem('skaiste_ideas', JSON.stringify(ideas));
+    renderIdeasView();
+    updateIdeaBadge();
+}
+
+function updateIdeaBadge() {
+    const badge = document.getElementById('ideaBadge');
+    if (ideas.length > 0) {
+        badge.className = 'idea-count-badge';
+        badge.textContent = ideas.length;
+        badge.style.display = 'flex';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
 // ── INTERACTIONS ──
 function selectDate(y,m,d) {
     selectedDate = new Date(y,m,d);
@@ -746,24 +947,44 @@ function expandDone(el, id) {
 }
 
 function setFilter(key) { activeFilter = key; render(); }
+function setPriorityFilter(key) { priorityFilter = key; render(); }
 
 function applyFilter(tasks) {
-    if (activeFilter === 'all') return tasks;
-    if (activeFilter === 'phone') return tasks.filter(t => t.device === 'phone');
-    if (activeFilter === 'computer') return tasks.filter(t => t.device === 'computer');
-    return tasks.filter(t => t.project === activeFilter);
+    let filtered = tasks;
+    if (activeFilter === 'phone') filtered = filtered.filter(t => t.device === 'phone');
+    else if (activeFilter === 'computer') filtered = filtered.filter(t => t.device === 'computer');
+    else if (activeFilter !== 'all') filtered = filtered.filter(t => t.project === activeFilter);
+
+    if (priorityFilter !== 'all') {
+        const pf = parseInt(priorityFilter);
+        filtered = filtered.filter(t => (t.priority||2) === pf);
+    }
+    return filtered;
 }
 
 function switchView(view) {
     currentView = view;
     document.getElementById('dayView').style.display = view === 'calendar' ? 'block' : 'none';
     document.getElementById('projectsView').style.display = view === 'projects' ? 'block' : 'none';
+    document.getElementById('ideasView').style.display = view === 'ideas' ? 'block' : 'none';
+    document.getElementById('monthGrid').style.display = view === 'calendar' ? 'block' : 'none';
+    document.querySelector('.month-nav').style.display = view === 'calendar' ? 'flex' : 'none';
+    document.getElementById('filterBar').style.display = view === 'calendar' ? 'block' : 'none';
     document.getElementById('navCal').classList.toggle('active', view === 'calendar');
     document.getElementById('navProj').classList.toggle('active', view === 'projects');
+    document.getElementById('navIdeas').classList.toggle('active', view === 'ideas');
     render();
 }
 
 function filterByProject(key) { activeFilter = key; switchView('calendar'); }
+
+function handleAddBtn() {
+    if (currentView === 'ideas') {
+        document.getElementById('ideaInput').focus();
+    } else {
+        openAddTask();
+    }
+}
 
 function fmtTime(min) {
     if (min >= 60) return Math.floor(min/60) + 'h' + (min%60 ? ' ' + min%60 + 'min' : '');
@@ -807,7 +1028,8 @@ function saveNewTask() {
         desc: document.getElementById('atDesc').value.trim(),
         type: 'task',
         duration: parseInt(document.getElementById('atDuration').value) || 30,
-        device: document.getElementById('atDevice').value
+        device: document.getElementById('atDevice').value,
+        priority: parseInt(document.getElementById('atPriority').value) || 2
     };
     customTasks.push(task);
     localStorage.setItem('customTasks', JSON.stringify(customTasks));
