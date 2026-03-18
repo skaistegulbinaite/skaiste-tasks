@@ -48,8 +48,38 @@
     {"id":"b38","date":"2026-06-03","project":"beribu","title":"Visa Beribu produktų šeima","desc":"Grupinė foto — visi produktai vienoje nuotraukoje","type":"foto","duration":45,"device":"phone","priority":3},
     {"id":"b39","date":"2026-06-05","project":"beribu","title":"Uogų sezonas artėja!","desc":"Bet kol šviežios neužaugo — mūsų šaldytos visada paruoštos","type":"sezonas","duration":45,"device":"phone","priority":2},
 
-    {"id":"r01","date":"2026-03-22","project":"retouchlab","title":"Patikrinti ar Adobe approved plugin","desc":"Prisijungti prie Adobe Developer Console ir patikrinti statusą","type":"task","duration":5,"device":"computer","priority":3},
-    {"id":"r02","date":"2026-03-22","project":"retouchlab","title":"Prijungti Shopify prie svetainės","desc":"Sukurti produktą Shopify, gauti Buy Button kodą, prijungti prie website","type":"task","duration":120,"device":"computer","priority":3},
-    {"id":"r03","date":"2026-03-22","project":"retouchlab","title":"Perkelti website tekstus į tikrą svetainę","desc":"Iš retouchlab-website-rewrite.html į hPanel svetainę","type":"task","duration":60,"device":"computer","priority":2}
+    {"id":"r04","date":"2026-03-19","project":"retouchlab","title":"Fix FastSpring account setup","desc":"Debug errors, set up payee account, get FastSpring Key, generate license codes, connect to Adobe Exchange","type":"task","duration":180,"device":"computer","priority":3},
+    {"id":"r05","date":"2026-03-19","project":"retouchlab","title":"Fix website domain + meta tags","desc":"Update canonical URL, OG tags, schema to correct domain. Uncomment OG image. Add favicon","type":"task","duration":30,"device":"computer","priority":3},
+
+    {"id":"r06","date":"2026-03-23","project":"retouchlab","title":"Create 4 feature images for website","desc":"Replace grey placeholder boxes in Features section with real screenshots of each feature","type":"task","duration":60,"device":"computer","priority":3},
+    {"id":"r07","date":"2026-03-23","project":"retouchlab","title":"Fix website domain + meta (if not done Thu)","desc":"Backup day for domain/meta fixes. Can work on laptop at hair salon","type":"task","duration":30,"device":"computer","priority":2},
+
+    {"id":"r08","date":"2026-03-24","project":"retouchlab","title":"Record full tutorial video","desc":"Screen record: install plugin → run → paint on skin → result. 2-3 min professional walkthrough","type":"task","duration":90,"device":"computer","priority":3},
+    {"id":"r09","date":"2026-03-24","project":"retouchlab","title":"Update How It Works section","desc":"Verify instructions match UXP plugin install flow (not old JSX script method)","type":"task","duration":20,"device":"computer","priority":2},
+
+    {"id":"r10","date":"2026-03-25","project":"retouchlab","title":"Research competitors in detail","desc":"Study DR5 SKIN, CreativeMagicPanel, Aperty — ads, copy, website style, pricing tactics","type":"task","duration":60,"device":"computer","priority":2},
+    {"id":"r11","date":"2026-03-25","project":"retouchlab","title":"Apply competitor tactics to website","desc":"Update website with bundles, social proof, discount strategy inspired by CreativeMagicPanel. Polish before sending traffic","type":"task","duration":90,"device":"computer","priority":3},
+
+    {"id":"r12","date":"2026-03-26","project":"retouchlab","title":"Install Google Analytics + Meta Pixel","desc":"Set up GA4 tracking + Facebook pixel for visitors, conversions, retargeting audiences","type":"task","duration":60,"device":"computer","priority":3},
+    {"id":"r13","date":"2026-03-26","project":"retouchlab","title":"Create 5 before/after posts","desc":"Strong before/after image pairs from real client photos for social media launch","type":"task","duration":90,"device":"computer","priority":3},
+
+    {"id":"r14","date":"2026-03-30","project":"retouchlab","title":"Write + send email blast","desc":"Sales email to 309 subscribers: problem (retouching takes hours) → solution (RetouchLab 20sec) → before/after → CTA","type":"task","duration":45,"device":"computer","priority":3},
+    {"id":"r15","date":"2026-03-30","project":"retouchlab","title":"Post RetouchLab launch on Instagram","desc":"Reel: screen recording 20sec demo + carousel before/after + story sequence on @skaistegulbe. LAUNCH DAY!","type":"task","duration":60,"device":"phone","priority":3},
+
+    {"id":"r16","date":"2026-04-08","project":"retouchlab","title":"Analyze first week of sales","desc":"Check: how many sales, which channel (email vs IG vs Adobe), GA4 traffic, conversion rate","type":"task","duration":20,"device":"computer","priority":3},
+    {"id":"r17","date":"2026-04-08","project":"retouchlab","title":"SEO keyword research","desc":"Find search terms photographers use. Claude Code will research and create keyword list","type":"task","duration":60,"device":"computer","priority":2},
+
+    {"id":"r18","date":"2026-04-09","project":"retouchlab","title":"Set up Meta Ads — Campaign 1","desc":"Before/after video ad targeting photographers. €10/day budget. Claude Code guides step by step","type":"task","duration":120,"device":"computer","priority":3},
+    {"id":"r19","date":"2026-04-09","project":"retouchlab","title":"Create 3 ad creatives","desc":"(1) Before/after reel (2) Speed demo screen recording (3) Testimonial-style with results","type":"task","duration":90,"device":"computer","priority":3},
+
+    {"id":"r20","date":"2026-04-15","project":"retouchlab","title":"Check Meta Ads week 1 — optimize","desc":"Review ad performance. Kill underperformers, scale winners, adjust targeting","type":"task","duration":30,"device":"computer","priority":3},
+    {"id":"r21","date":"2026-04-15","project":"retouchlab","title":"SEO landing pages","desc":"Create targeted landing pages for top keywords. Organic Google traffic long-term play","type":"task","duration":120,"device":"computer","priority":2},
+
+    {"id":"r22","date":"2026-04-21","project":"retouchlab","title":"YouTube tutorial + SEO video","desc":"Film detailed tutorial, upload to YouTube. Optimize title/description/tags for search","type":"task","duration":120,"device":"computer","priority":2},
+
+    {"id":"r23","date":"2026-04-27","project":"retouchlab","title":"Monthly review — RetouchLab","desc":"Total sales, revenue, ad ROI, best channel, website conversion rate. Plan next month","type":"task","duration":30,"device":"computer","priority":3},
+    {"id":"r24","date":"2026-04-27","project":"retouchlab","title":"Reddit + IG photographer outreach","desc":"Post on r/photoshop r/photography. DM IG photographers — offer free plugin for story/review","type":"task","duration":60,"device":"computer","priority":2},
+
+    {"id":"r25","date":"2026-05-04","project":"retouchlab","title":"Scale Meta Ads — new audiences","desc":"Test: wedding photographers, beauty photographers, international markets. Increase budget on proven ads","type":"task","duration":60,"device":"computer","priority":2}
   ]
 }
