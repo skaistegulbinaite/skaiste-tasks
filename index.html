@@ -298,25 +298,34 @@
         .idea-actions { display:flex; justify-content:flex-end; gap:8px; align-items:center; margin-top:8px; }
         .idea-mic-btn {
             width:36px; height:36px; border-radius:50%;
-            background:var(--surface2); border:1px solid var(--border);
+            background:var(--surface2); border:2px solid var(--border);
             color:var(--text2); cursor:pointer;
             display:flex; align-items:center; justify-content:center;
-            transition:all .2s; flex-shrink:0;
+            transition:all .3s cubic-bezier(0.4,0,0.2,1); flex-shrink:0;
+            position:relative;
         }
-        .idea-mic-btn:active { transform:scale(0.9); }
+        .idea-mic-btn:active { transform:scale(0.85); }
         .idea-mic-btn.recording {
-            background:var(--accent); color:var(--bg);
-            border-color:var(--accent);
-            animation:micPulse 1.2s ease-in-out infinite;
+            width:44px; height:44px;
+            background:#ff4466; color:#fff;
+            border-color:#ff4466; border-radius:12px;
+            animation:micPulse 1s ease-in-out infinite;
+            box-shadow:0 0 20px rgba(255,68,102,0.5);
         }
-        .idea-mic-btn svg { width:18px; height:18px; }
+        .idea-mic-btn.recording svg { width:16px; height:16px; }
+        .idea-mic-btn svg { width:18px; height:18px; transition:all .2s; }
         @keyframes micPulse {
-            0%, 100% { box-shadow:0 0 0 0 rgba(245,198,208,0.4); }
-            50% { box-shadow:0 0 0 10px rgba(245,198,208,0); }
+            0%, 100% { box-shadow:0 0 8px rgba(255,68,102,0.4), 0 0 20px rgba(255,68,102,0.2); transform:scale(1); }
+            50% { box-shadow:0 0 16px rgba(255,68,102,0.6), 0 0 40px rgba(255,68,102,0.3); transform:scale(1.08); }
         }
         .voice-status {
             font-size:11px; color:var(--accent2); font-weight:600;
             flex:1; text-align:left;
+        }
+        .voice-status.active { color:#ff4466; animation:statusBlink 1.5s ease-in-out infinite; }
+        @keyframes statusBlink {
+            0%, 100% { opacity:1; }
+            50% { opacity:0.5; }
         }
         .idea-save-btn {
             background:var(--accent); color:var(--bg); border:none;
@@ -1031,6 +1040,8 @@ function deleteIdea(id) {
 // ── VOICE RECORDING ──
 let recognition = null;
 let isRecording = false;
+const MIC_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>';
+const STOP_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
 
 function toggleVoice() {
     if (isRecording) {
@@ -1040,25 +1051,33 @@ function toggleVoice() {
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-        document.getElementById('voiceStatus').textContent = 'Not supported on this browser';
-        setTimeout(() => { document.getElementById('voiceStatus').textContent = ''; }, 3000);
+        const status = document.getElementById('voiceStatus');
+        status.textContent = 'Voice not supported — type your idea instead';
+        status.classList.add('active');
+        setTimeout(() => { status.textContent = ''; status.classList.remove('active'); }, 3000);
         return;
     }
 
     recognition = new SpeechRecognition();
-    recognition.lang = navigator.language || 'en-US'; // Uses your phone's language
+    recognition.lang = navigator.language || 'en-US';
     recognition.continuous = true;
     recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
 
     const input = document.getElementById('ideaInput');
     const micBtn = document.getElementById('micBtn');
     const status = document.getElementById('voiceStatus');
     let finalTranscript = input.value;
+    let restartCount = 0;
 
     recognition.onstart = () => {
         isRecording = true;
         micBtn.classList.add('recording');
-        status.textContent = '🎙 Listening...';
+        micBtn.innerHTML = STOP_SVG;
+        status.textContent = '● Recording...';
+        status.classList.add('active');
+        // Vibrate on phones that support it
+        if (navigator.vibrate) navigator.vibrate(50);
     };
 
     recognition.onresult = (e) => {
@@ -1071,30 +1090,42 @@ function toggleVoice() {
             }
         }
         input.value = finalTranscript + (interim ? ' ' + interim : '');
+        // Auto-resize textarea
+        input.style.height = 'auto';
+        input.style.height = Math.max(60, input.scrollHeight) + 'px';
+        status.textContent = '● Recording...';
     };
 
     recognition.onerror = (e) => {
-        if (e.error === 'not-allowed') {
-            status.textContent = 'Microphone access denied';
+        console.log('Speech error:', e.error);
+        if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+            status.textContent = '⚠ Allow microphone in browser settings';
+            status.classList.add('active');
+            setTimeout(() => { status.textContent = ''; status.classList.remove('active'); }, 4000);
+            stopVoice();
+        } else if (e.error === 'no-speech') {
+            status.textContent = '● Listening... speak now';
         } else if (e.error !== 'aborted') {
-            status.textContent = 'Error: ' + e.error;
+            status.textContent = '⚠ ' + e.error;
+            setTimeout(() => { status.textContent = isRecording ? '● Recording...' : ''; }, 2000);
         }
-        setTimeout(() => { status.textContent = ''; }, 3000);
-        stopVoice();
     };
 
     recognition.onend = () => {
-        if (isRecording) {
-            // Auto-restart if still recording (handles iOS timeout)
+        if (isRecording && restartCount < 10) {
+            restartCount++;
             try { recognition.start(); } catch(e) { stopVoice(); }
+        } else if (isRecording) {
+            stopVoice();
         }
     };
 
     try {
         recognition.start();
     } catch(e) {
-        status.textContent = 'Could not start microphone';
-        setTimeout(() => { status.textContent = ''; }, 3000);
+        status.textContent = '⚠ Could not start — try again';
+        status.classList.add('active');
+        setTimeout(() => { status.textContent = ''; status.classList.remove('active'); }, 3000);
     }
 }
 
@@ -1106,8 +1137,15 @@ function stopVoice() {
     }
     const micBtn = document.getElementById('micBtn');
     const status = document.getElementById('voiceStatus');
-    if (micBtn) micBtn.classList.remove('recording');
-    if (status) status.textContent = '';
+    if (micBtn) {
+        micBtn.classList.remove('recording');
+        micBtn.innerHTML = MIC_SVG;
+    }
+    if (status) {
+        status.textContent = '';
+        status.classList.remove('active');
+    }
+    if (navigator.vibrate) navigator.vibrate(30);
 }
 
 // ── GITHUB SYNC ──
