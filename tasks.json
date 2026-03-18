@@ -96,12 +96,12 @@
     {"id":"k11","date":"2026-05-18","project":"course","title":"Build posing course page + sales page","desc":"Summer messaging: 'Look stunning at every event this summer'. Build with Claude Code","type":"task","duration":120,"device":"computer","priority":3},
     {"id":"k12","date":"2026-05-25","project":"course","title":"Launch posing course!","desc":"Email blast + Instagram + summer promo. Target: women 18-35, wedding season, vacation season","type":"task","duration":90,"device":"computer","priority":3},
 
-    {"id":"l01","date":"2026-03-21","project":"course","title":"Viral video course (part 1)","desc":"Watch from home, take notes. Learn reel/TikTok creation for all your marketing","type":"learn","duration":30,"device":"computer","priority":2},
-    {"id":"l02","date":"2026-03-28","project":"course","title":"Viral video course (part 2)","desc":"Finish the course. Apply learnings — plan your first reel using the techniques","type":"learn","duration":30,"device":"computer","priority":2},
-    {"id":"l03","date":"2026-04-04","project":"course","title":"Learning: SEO basics for beginners","desc":"30min — understand how Google ranks pages. Will help with RetouchLab + course SEO","type":"learn","duration":30,"device":"computer","priority":1},
-    {"id":"l04","date":"2026-04-11","project":"course","title":"Learning: Meta Ads fundamentals","desc":"30min — how ad targeting works, how to read metrics. Prep for RetouchLab ad campaign","type":"learn","duration":30,"device":"computer","priority":1},
-    {"id":"l05","date":"2026-04-18","project":"course","title":"Learning: Email marketing tactics","desc":"30min — how to write emails that sell, subject lines, segmentation. Your best channel (70% of sales)","type":"learn","duration":30,"device":"computer","priority":1},
-    {"id":"l06","date":"2026-04-25","project":"course","title":"Learning: Course creation best practices","desc":"30min — how top course creators structure content, pricing psychology, launch strategies","type":"learn","duration":30,"device":"computer","priority":1},
+    {"id":"l01","date":"2026-03-20","project":"course","title":"Viral video course (part 1)","desc":"Watch from home, take notes. Learn reel/TikTok creation for all your marketing","type":"learn","duration":30,"device":"computer","priority":2},
+    {"id":"l02","date":"2026-03-27","project":"course","title":"Viral video course (part 2)","desc":"Finish the course. Apply learnings — plan your first reel using the techniques","type":"learn","duration":30,"device":"computer","priority":2},
+    {"id":"l03","date":"2026-04-03","project":"course","title":"Learning: SEO basics for beginners","desc":"30min — understand how Google ranks pages. Will help with RetouchLab + course SEO","type":"learn","duration":30,"device":"computer","priority":1},
+    {"id":"l04","date":"2026-04-10","project":"course","title":"Learning: Meta Ads fundamentals","desc":"30min — how ad targeting works, how to read metrics. Prep for RetouchLab ad campaign","type":"learn","duration":30,"device":"computer","priority":1},
+    {"id":"l05","date":"2026-04-17","project":"course","title":"Learning: Email marketing tactics","desc":"30min — how to write emails that sell, subject lines, segmentation. Your best channel (70% of sales)","type":"learn","duration":30,"device":"computer","priority":1},
+    {"id":"l06","date":"2026-04-24","project":"course","title":"Learning: Course creation best practices","desc":"30min — how top course creators structure content, pricing psychology, launch strategies","type":"learn","duration":30,"device":"computer","priority":1},
 
     {"id":"p01","date":"2026-03-25","project":"photo","title":"Retouch + send: Eiminta (28), Amanda (10), Simona (22)","desc":"60 photos total ~1.5h. Photos return Mar 24. Retouch small fixes + send via WeTransfer","type":"retouch","duration":90,"device":"computer","priority":3},
     {"id":"p02","date":"2026-03-26","project":"photo","title":"Retouch + send: Vilija (15), Ilona (23)","desc":"38 photos total ~57min. Photos return Mar 25","type":"retouch","duration":60,"device":"computer","priority":3},
@@ -128,9 +128,9 @@
     {"id":"p21","date":"2026-04-15","project":"photo","title":"Create + post photography reel","desc":"Mid-month reel — client transformation, studio vibes, or photography tip","type":"reel","duration":45,"device":"phone","priority":2},
     {"id":"p22","date":"2026-05-01","project":"photo","title":"Create + post photography reel","desc":"May reel — summer is coming, book your photoshoot!","type":"reel","duration":45,"device":"phone","priority":2},
 
-    {"id":"p23","date":"2026-03-28","project":"photo","title":"IG stories — Q&A or testimonials","desc":"Do a Q&A box or share client testimonials on stories","type":"stories","duration":20,"device":"phone","priority":1},
-    {"id":"p24","date":"2026-04-11","project":"photo","title":"IG stories — Q&A or topic talk","desc":"Talk about something your audience is interested in, or share testimonials","type":"stories","duration":20,"device":"phone","priority":1},
-    {"id":"p25","date":"2026-04-25","project":"photo","title":"IG stories — Q&A or testimonials","desc":"Every other Friday — stories engagement","type":"stories","duration":20,"device":"phone","priority":1},
+    {"id":"p23","date":"2026-03-27","project":"photo","title":"IG stories — Q&A or testimonials","desc":"Do a Q&A box or share client testimonials on stories","type":"stories","duration":20,"device":"phone","priority":1},
+    {"id":"p24","date":"2026-04-10","project":"photo","title":"IG stories — Q&A or topic talk","desc":"Talk about something your audience is interested in, or share testimonials","type":"stories","duration":20,"device":"phone","priority":1},
+    {"id":"p25","date":"2026-04-24","project":"photo","title":"IG stories — Q&A or testimonials","desc":"Every other Friday — stories engagement","type":"stories","duration":20,"device":"phone","priority":1},
 
     {"id":"p26","date":"2026-04-07","project":"photo","title":"Plan Kaunas influencer shoot #1","desc":"Find 1-2 local Kaunas influencers, DM to propose free/collab shoot. Strategic — do it before moving!","type":"task","duration":30,"device":"phone","priority":2},
     {"id":"p27","date":"2026-05-19","project":"photo","title":"Plan Kaunas influencer shoot #2","desc":"Last Kaunas influencer shoot before move prep starts","type":"task","duration":30,"device":"phone","priority":2},
@@ -149,7 +149,7 @@
     {"id":"ig06","date":"2026-04-01","project":"instagram","title":"Monthly brand deal review","desc":"How many active barter deals? What free stuff did you get? Which brands to keep, which to drop? Plan next month's pitches","type":"task","duration":15,"device":"phone","priority":1},
     {"id":"ig07","date":"2026-05-01","project":"instagram","title":"Monthly brand deal review","desc":"May review. Goal: 2 active deals/month. Track what you're saving (facials, products, etc.)","type":"task","duration":15,"device":"phone","priority":1},
 
-    {"id":"ig08","date":"2026-03-28","project":"instagram","title":"Follower growth check — plan for 15k","desc":"Current: 13.5k. Target: 15k by Dec. Brainstorm: what content gets most reach? Reels, collabs, giveaways? Make a mini growth plan","type":"task","duration":20,"device":"phone","priority":2},
+    {"id":"ig08","date":"2026-03-27","project":"instagram","title":"Follower growth check — plan for 15k","desc":"Current: 13.5k. Target: 15k by Dec. Brainstorm: what content gets most reach? Reels, collabs, giveaways? Make a mini growth plan","type":"task","duration":20,"device":"phone","priority":2},
     {"id":"ig09","date":"2026-04-28","project":"instagram","title":"Follower growth check","desc":"Monthly check: follower count, best performing posts, what to do more of. On track for 15k?","type":"task","duration":15,"device":"phone","priority":1}
   ]
 }
