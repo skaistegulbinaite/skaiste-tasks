@@ -80,6 +80,27 @@
     {"id":"r23","date":"2026-04-27","project":"retouchlab","title":"Monthly review — RetouchLab","desc":"Total sales, revenue, ad ROI, best channel, website conversion rate. Plan next month","type":"task","duration":30,"device":"computer","priority":3},
     {"id":"r24","date":"2026-04-27","project":"retouchlab","title":"Reddit + IG photographer outreach","desc":"Post on r/photoshop r/photography. DM IG photographers — offer free plugin for story/review","type":"task","duration":60,"device":"computer","priority":2},
 
-    {"id":"r25","date":"2026-05-04","project":"retouchlab","title":"Scale Meta Ads — new audiences","desc":"Test: wedding photographers, beauty photographers, international markets. Increase budget on proven ads","type":"task","duration":60,"device":"computer","priority":2}
+    {"id":"r25","date":"2026-05-04","project":"retouchlab","title":"Scale Meta Ads — new audiences","desc":"Test: wedding photographers, beauty photographers, international markets. Increase budget on proven ads","type":"task","duration":60,"device":"computer","priority":2},
+
+    {"id":"k01","date":"2026-03-25","project":"course","title":"Brainstorm collab/giveaway partners","desc":"List 5 studios or brands to approach for joint giveaway — I give course, they give product/studio time","type":"task","duration":30,"device":"computer","priority":2},
+    {"id":"k02","date":"2026-03-30","project":"course","title":"Write DMs to 5 giveaway partners","desc":"Send collab proposals: joint giveaway, both grow audiences. Studios, brands, other photographers","type":"task","duration":30,"device":"phone","priority":2},
+    {"id":"k03","date":"2026-04-08","project":"course","title":"SEO for course page","desc":"Keyword research + update page titles, meta, descriptions with Claude Code","type":"task","duration":45,"device":"computer","priority":2},
+    {"id":"k04","date":"2026-04-14","project":"course","title":"Write 1 IG post about the course","desc":"Educational reel showing a tip from the course content — free value that sells the course","type":"task","duration":30,"device":"phone","priority":1},
+    {"id":"k05","date":"2026-04-28","project":"course","title":"Course monthly review","desc":"Check sales, what's working, what's not. Decide: keep pushing or pause until posing course?","type":"task","duration":15,"device":"computer","priority":2},
+
+    {"id":"k06","date":"2026-04-15","project":"course","title":"Research posing courses market","desc":"Who sells them, what price, what format. Summer angle: weddings, events, beach, vacation photos","type":"task","duration":60,"device":"computer","priority":2},
+    {"id":"k07","date":"2026-04-21","project":"course","title":"Define posing course outline","desc":"Chapters: selfies, full body, group photos, wedding guest, beach/vacation, date night. Brainstorm with Claude","type":"task","duration":60,"device":"computer","priority":2},
+    {"id":"k08","date":"2026-04-22","project":"course","title":"Plan posing course filming","desc":"Summer locations, outfits, which poses per chapter. Maybe film BTS during photoshoots","type":"task","duration":45,"device":"computer","priority":2},
+    {"id":"k09","date":"2026-05-04","project":"course","title":"Film first 2 posing course videos","desc":"Start with easiest chapters. Summer weather = outdoor filming possible","type":"task","duration":120,"device":"phone","priority":3},
+    {"id":"k10","date":"2026-05-11","project":"course","title":"Film next 2 posing course videos","desc":"Continue filming. Keep momentum — summer launch target end of May","type":"task","duration":120,"device":"phone","priority":2},
+    {"id":"k11","date":"2026-05-18","project":"course","title":"Build posing course page + sales page","desc":"Summer messaging: 'Look stunning at every event this summer'. Build with Claude Code","type":"task","duration":120,"device":"computer","priority":3},
+    {"id":"k12","date":"2026-05-25","project":"course","title":"Launch posing course!","desc":"Email blast + Instagram + summer promo. Target: women 18-35, wedding season, vacation season","type":"task","duration":90,"device":"computer","priority":3},
+
+    {"id":"l01","date":"2026-03-21","project":"course","title":"Viral video course (part 1)","desc":"Watch from home, take notes. Learn reel/TikTok creation for all your marketing","type":"learn","duration":30,"device":"computer","priority":2},
+    {"id":"l02","date":"2026-03-28","project":"course","title":"Viral video course (part 2)","desc":"Finish the course. Apply learnings — plan your first reel using the techniques","type":"learn","duration":30,"device":"computer","priority":2},
+    {"id":"l03","date":"2026-04-04","project":"course","title":"Learning: SEO basics for beginners","desc":"30min — understand how Google ranks pages. Will help with RetouchLab + course SEO","type":"learn","duration":30,"device":"computer","priority":1},
+    {"id":"l04","date":"2026-04-11","project":"course","title":"Learning: Meta Ads fundamentals","desc":"30min — how ad targeting works, how to read metrics. Prep for RetouchLab ad campaign","type":"learn","duration":30,"device":"computer","priority":1},
+    {"id":"l05","date":"2026-04-18","project":"course","title":"Learning: Email marketing tactics","desc":"30min — how to write emails that sell, subject lines, segmentation. Your best channel (70% of sales)","type":"learn","duration":30,"device":"computer","priority":1},
+    {"id":"l06","date":"2026-04-25","project":"course","title":"Learning: Course creation best practices","desc":"30min — how top course creators structure content, pricing psychology, launch strategies","type":"learn","duration":30,"device":"computer","priority":1}
   ]
 }
