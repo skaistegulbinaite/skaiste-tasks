@@ -1046,7 +1046,7 @@ function toggleVoice() {
     }
 
     recognition = new SpeechRecognition();
-    recognition.lang = 'lt-LT'; // Lithuanian first, falls back
+    recognition.lang = navigator.language || 'en-US'; // Uses your phone's language
     recognition.continuous = true;
     recognition.interimResults = true;
 
