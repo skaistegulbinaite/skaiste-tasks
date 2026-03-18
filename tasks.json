@@ -138,6 +138,18 @@
     {"id":"p28","date":"2026-05-05","project":"photo","title":"Announce Vilnius move on IG","desc":"Post + stories: 'I'm moving to Vilnius in October! Last months shooting in Kaunas — book now'","type":"task","duration":30,"device":"phone","priority":3},
     {"id":"p29","date":"2026-05-05","project":"photo","title":"Update booking page — Vilnius move notice","desc":"Add 'Moving to Vilnius October 2026' to coupon page, booking flow, website","type":"task","duration":30,"device":"computer","priority":3},
     {"id":"p30","date":"2026-06-02","project":"photo","title":"IG reminder — Last months in Kaunas!","desc":"Story sequence: countdown to move, book your last Kaunas shoot","type":"task","duration":15,"device":"phone","priority":2},
-    {"id":"p31","date":"2026-06-30","project":"photo","title":"Client communication — Vilnius transition","desc":"DM coupon holders about move, inform all recent clients about Vilnius studio timeline","type":"task","duration":30,"device":"phone","priority":3}
+    {"id":"p31","date":"2026-06-30","project":"photo","title":"Client communication — Vilnius transition","desc":"DM coupon holders about move, inform all recent clients about Vilnius studio timeline","type":"task","duration":30,"device":"phone","priority":3},
+
+    {"id":"ig01","date":"2026-03-24","project":"instagram","title":"Rejection challenge — DM 5 brands","desc":"DM 5 brands you'd love barter deals with: beauty, skincare, gym, food, lifestyle. Goal: collect rejections, but you'll get yeses with 13.5k followers!","type":"task","duration":30,"device":"phone","priority":2},
+    {"id":"ig02","date":"2026-04-07","project":"instagram","title":"Rejection challenge — DM 5 new brands","desc":"Round 2: 5 more brands. Check responses from March. Tip: photo brands in natural moments (gym morning, coffee, getting ready)","type":"task","duration":30,"device":"phone","priority":2},
+    {"id":"ig03","date":"2026-04-21","project":"instagram","title":"Rejection challenge — DM 5 brands","desc":"Round 3. By now you should have 2+ active barter deals. Think summer brands — swimwear, sunscreen, travel gear","type":"task","duration":30,"device":"phone","priority":2},
+    {"id":"ig04","date":"2026-05-05","project":"instagram","title":"Rejection challenge — DM 5 brands","desc":"Round 4. Summer collabs! Also pitch Vilnius brands for after the move","type":"task","duration":30,"device":"phone","priority":2},
+    {"id":"ig05","date":"2026-05-19","project":"instagram","title":"Rejection challenge — DM 5 brands","desc":"Round 5. Keep pipeline going. Review: which brand categories give best response rate?","type":"task","duration":30,"device":"phone","priority":2},
+
+    {"id":"ig06","date":"2026-04-01","project":"instagram","title":"Monthly brand deal review","desc":"How many active barter deals? What free stuff did you get? Which brands to keep, which to drop? Plan next month's pitches","type":"task","duration":15,"device":"phone","priority":1},
+    {"id":"ig07","date":"2026-05-01","project":"instagram","title":"Monthly brand deal review","desc":"May review. Goal: 2 active deals/month. Track what you're saving (facials, products, etc.)","type":"task","duration":15,"device":"phone","priority":1},
+
+    {"id":"ig08","date":"2026-03-28","project":"instagram","title":"Follower growth check — plan for 15k","desc":"Current: 13.5k. Target: 15k by Dec. Brainstorm: what content gets most reach? Reels, collabs, giveaways? Make a mini growth plan","type":"task","duration":20,"device":"phone","priority":2},
+    {"id":"ig09","date":"2026-04-28","project":"instagram","title":"Follower growth check","desc":"Monthly check: follower count, best performing posts, what to do more of. On track for 15k?","type":"task","duration":15,"device":"phone","priority":1}
   ]
 }
