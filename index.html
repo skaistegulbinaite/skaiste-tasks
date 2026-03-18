@@ -532,6 +532,12 @@ let priorityFilter = 'all';
 let doneIds = JSON.parse(localStorage.getItem('doneTasks3') || '{}');
 let ideas = JSON.parse(localStorage.getItem('skaiste_ideas') || '[]');
 
+// ── GITHUB SYNC CONFIG ──
+const GH_REPO = 'skaistegulbinaite/skaiste-tasks';
+const GH_IDEAS_PATH = 'ideas.json';
+let ghToken = localStorage.getItem('gh_token') || '';
+let ghIdeasSha = null; // track the file SHA for updates
+
 const LT_DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const LT_DAYS_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const LT_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -549,6 +555,7 @@ async function init() {
     }
     render();
     updateIdeaBadge();
+    loadIdeasFromGitHub();
 }
 
 function fmt(d) {
@@ -850,7 +857,15 @@ function renderProjectsView() {
 function renderIdeasView() {
     const container = document.getElementById('ideasView');
 
-    let html = `<div class="section-title">Capture ideas</div>
+    const tokenSet = ghToken ? `<span style="color:#6b6;font-size:11px">● Connected</span>` : `<span style="color:var(--text3);font-size:11px">○ Not synced</span>`;
+    let html = `<div class="section-title" style="display:flex;align-items:center;justify-content:space-between">
+        Capture ideas
+        <div style="display:flex;align-items:center;gap:8px">
+            <span id="syncStatus" style="font-size:11px;color:#6b6;opacity:0;transition:opacity 0.3s"></span>
+            ${tokenSet}
+            <button onclick="openTokenSetup()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text2);padding:4px 8px;font-size:11px;cursor:pointer">⚙️</button>
+        </div>
+    </div>
     <div class="idea-input-wrap">
         <textarea class="idea-textarea" id="ideaInput" placeholder="What's on your mind..."></textarea>
         <div class="idea-actions">
@@ -890,6 +905,7 @@ function saveIdea() {
     input.value = '';
     renderIdeasView();
     updateIdeaBadge();
+    syncIdeasToGitHub();
 }
 
 function deleteIdea(id) {
@@ -897,6 +913,85 @@ function deleteIdea(id) {
     localStorage.setItem('skaiste_ideas', JSON.stringify(ideas));
     renderIdeasView();
     updateIdeaBadge();
+    syncIdeasToGitHub();
+}
+
+// ── GITHUB SYNC ──
+async function loadIdeasFromGitHub() {
+    if (!ghToken) return;
+    try {
+        const res = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_IDEAS_PATH}`, {
+            headers: { 'Authorization': `token ${ghToken}`, 'Accept': 'application/vnd.github.v3+json' }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        ghIdeasSha = data.sha;
+        const content = JSON.parse(atob(data.content));
+        if (Array.isArray(content)) {
+            // Merge: keep local ideas + add any from GitHub not in local
+            const localIds = new Set(ideas.map(i => i.id));
+            content.forEach(gi => { if (!localIds.has(gi.id)) ideas.push(gi); });
+            // Also add local-only ideas to the merged set
+            const ghIds = new Set(content.map(i => i.id));
+            const merged = [...content];
+            ideas.forEach(li => { if (!ghIds.has(li.id)) merged.push(li); });
+            ideas = merged;
+            localStorage.setItem('skaiste_ideas', JSON.stringify(ideas));
+            renderIdeasView();
+            updateIdeaBadge();
+        }
+    } catch(e) { console.log('GitHub ideas load failed:', e); }
+}
+
+async function syncIdeasToGitHub() {
+    if (!ghToken) return;
+    try {
+        // Get current SHA first
+        const getRes = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_IDEAS_PATH}`, {
+            headers: { 'Authorization': `token ${ghToken}`, 'Accept': 'application/vnd.github.v3+json' }
+        });
+        if (getRes.ok) {
+            const getData = await getRes.json();
+            ghIdeasSha = getData.sha;
+        }
+        const body = {
+            message: 'Sync ideas',
+            content: btoa(unescape(encodeURIComponent(JSON.stringify(ideas, null, 2)))),
+            branch: 'main'
+        };
+        if (ghIdeasSha) body.sha = ghIdeasSha;
+        const res = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_IDEAS_PATH}`, {
+            method: 'PUT',
+            headers: { 'Authorization': `token ${ghToken}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
+            body: JSON.stringify(body)
+        });
+        if (res.ok) {
+            const result = await res.json();
+            ghIdeasSha = result.content.sha;
+            showSyncStatus('Synced ✓');
+        } else {
+            showSyncStatus('Sync failed');
+        }
+    } catch(e) { console.log('GitHub sync failed:', e); showSyncStatus('Sync failed'); }
+}
+
+function showSyncStatus(msg) {
+    const el = document.getElementById('syncStatus');
+    if (!el) return;
+    el.textContent = msg;
+    el.style.opacity = '1';
+    setTimeout(() => { el.style.opacity = '0'; }, 2000);
+}
+
+function openTokenSetup() {
+    const current = ghToken ? '••••' + ghToken.slice(-4) : 'Not set';
+    const token = prompt(`GitHub Token (current: ${current})\n\nTo create one:\n1. Go to github.com → Settings → Developer settings\n2. Personal access tokens → Fine-grained tokens\n3. Create token with "Contents" read/write for skaiste-tasks repo\n\nPaste your token:`);
+    if (token && token.trim()) {
+        ghToken = token.trim();
+        localStorage.setItem('gh_token', ghToken);
+        loadIdeasFromGitHub();
+        alert('Token saved! Ideas will now sync to GitHub.');
+    }
 }
 
 function updateIdeaBadge() {
