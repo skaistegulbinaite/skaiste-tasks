@@ -398,9 +398,32 @@
         .task-card { animation:fadeUp .25s ease both; }
         @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
         ::-webkit-scrollbar { width:0; }
+
+        /* ── PIN LOCK ── */
+        .pin-dot { width:14px; height:14px; border-radius:50%; border:2px solid var(--text3); transition:all .15s; }
+        .pin-dot.filled { background:var(--text); border-color:var(--text); }
+        .pin-btn {
+            width:68px; height:68px; border-radius:50%;
+            background:var(--surface); border:1px solid var(--border);
+            color:var(--text); font-family:'Bowlby One',sans-serif;
+            font-size:24px; cursor:pointer; display:flex;
+            align-items:center; justify-content:center;
+            transition:background .15s; margin:0 auto;
+        }
+        .pin-btn:active { background:var(--surface3); }
+        .pin-btn.del { font-size:14px; font-family:'Poppins',sans-serif; font-weight:600; color:var(--text2); }
     </style>
 </head>
 <body>
+
+<!-- ── PIN LOCK SCREEN ── -->
+<div id="lockScreen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;">
+    <div style="font-family:'Bowlby One',sans-serif;font-size:48px;margin-bottom:8px;color:var(--text)">W</div>
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:32px">Skaiste Tasks</div>
+    <div id="pinDots" style="display:flex;gap:12px;margin-bottom:24px"></div>
+    <div id="pinPad" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:240px;width:100%"></div>
+    <div id="pinError" style="font-size:12px;color:#e88a8a;margin-top:16px;opacity:0;transition:opacity .3s"></div>
+</div>
 
 <div class="header">
     <div class="header-left">
@@ -499,6 +522,66 @@
 </nav>
 
 <script>
+// ── PIN LOCK ──
+const PIN_HASH = '9630';
+const isUnlocked = localStorage.getItem('app_unlocked') === 'yes';
+
+if (!isUnlocked) {
+    document.getElementById('lockScreen').style.display = 'flex';
+    document.querySelector('.header').style.display = 'none';
+    document.querySelector('.month-nav').style.display = 'none';
+    document.getElementById('monthGrid').style.display = 'none';
+    document.getElementById('filterBar').style.display = 'none';
+    document.getElementById('dayView').style.display = 'none';
+    document.getElementById('addBtn').style.display = 'none';
+    document.querySelector('.bottom-nav').style.display = 'none';
+
+    let pinEntry = '';
+    const dotsEl = document.getElementById('pinDots');
+    const padEl = document.getElementById('pinPad');
+    const errEl = document.getElementById('pinError');
+
+    for (let i = 0; i < 4; i++) dotsEl.innerHTML += '<div class="pin-dot"></div>';
+
+    [1,2,3,4,5,6,7,8,9,'',0,'⌫'].forEach(n => {
+        if (n === '') { padEl.innerHTML += '<div></div>'; return; }
+        const cls = n === '⌫' ? 'pin-btn del' : 'pin-btn';
+        padEl.innerHTML += `<button class="${cls}" onclick="pinPress('${n}')">${n}</button>`;
+    });
+
+    window.pinPress = function(n) {
+        if (n === '⌫') { pinEntry = pinEntry.slice(0,-1); }
+        else if (pinEntry.length < 4) { pinEntry += n; }
+
+        const dots = dotsEl.querySelectorAll('.pin-dot');
+        dots.forEach((d,i) => d.classList.toggle('filled', i < pinEntry.length));
+
+        if (pinEntry.length === 4) {
+            if (pinEntry === PIN_HASH) {
+                localStorage.setItem('app_unlocked', 'yes');
+                document.getElementById('lockScreen').style.display = 'none';
+                document.querySelector('.header').style.display = '';
+                document.querySelector('.month-nav').style.display = '';
+                document.getElementById('monthGrid').style.display = '';
+                document.getElementById('filterBar').style.display = '';
+                document.getElementById('dayView').style.display = '';
+                document.getElementById('addBtn').style.display = '';
+                document.querySelector('.bottom-nav').style.display = '';
+            } else {
+                errEl.textContent = 'Wrong PIN';
+                errEl.style.opacity = '1';
+                pinEntry = '';
+                setTimeout(() => {
+                    dots.forEach(d => d.classList.remove('filled'));
+                    errEl.style.opacity = '0';
+                }, 800);
+            }
+        }
+    };
+} else {
+    document.getElementById('lockScreen').style.display = 'none';
+}
+
 // ── SVG ICON TEMPLATES ──
 const ICONS = {
     clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
