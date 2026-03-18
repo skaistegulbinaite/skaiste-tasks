@@ -295,7 +295,29 @@
             min-height:60px;
         }
         .idea-textarea::placeholder { color:var(--text3); }
-        .idea-actions { display:flex; justify-content:flex-end; margin-top:8px; }
+        .idea-actions { display:flex; justify-content:flex-end; gap:8px; align-items:center; margin-top:8px; }
+        .idea-mic-btn {
+            width:36px; height:36px; border-radius:50%;
+            background:var(--surface2); border:1px solid var(--border);
+            color:var(--text2); cursor:pointer;
+            display:flex; align-items:center; justify-content:center;
+            transition:all .2s; flex-shrink:0;
+        }
+        .idea-mic-btn:active { transform:scale(0.9); }
+        .idea-mic-btn.recording {
+            background:var(--accent); color:var(--bg);
+            border-color:var(--accent);
+            animation:micPulse 1.2s ease-in-out infinite;
+        }
+        .idea-mic-btn svg { width:18px; height:18px; }
+        @keyframes micPulse {
+            0%, 100% { box-shadow:0 0 0 0 rgba(245,198,208,0.4); }
+            50% { box-shadow:0 0 0 10px rgba(245,198,208,0); }
+        }
+        .voice-status {
+            font-size:11px; color:var(--accent2); font-weight:600;
+            flex:1; text-align:left;
+        }
         .idea-save-btn {
             background:var(--accent); color:var(--bg); border:none;
             padding:7px 18px; border-radius:8px; font-family:inherit;
@@ -955,6 +977,10 @@ function renderIdeasView() {
     <div class="idea-input-wrap">
         <textarea class="idea-textarea" id="ideaInput" placeholder="What's on your mind..."></textarea>
         <div class="idea-actions">
+            <span class="voice-status" id="voiceStatus"></span>
+            <button class="idea-mic-btn" id="micBtn" onclick="toggleVoice()" title="Voice input">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </button>
             <button class="idea-save-btn" onclick="saveIdea()">Save idea</button>
         </div>
     </div>`;
@@ -1000,6 +1026,88 @@ function deleteIdea(id) {
     renderIdeasView();
     updateIdeaBadge();
     syncIdeasToGitHub();
+}
+
+// ── VOICE RECORDING ──
+let recognition = null;
+let isRecording = false;
+
+function toggleVoice() {
+    if (isRecording) {
+        stopVoice();
+        return;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        document.getElementById('voiceStatus').textContent = 'Not supported on this browser';
+        setTimeout(() => { document.getElementById('voiceStatus').textContent = ''; }, 3000);
+        return;
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.lang = 'lt-LT'; // Lithuanian first, falls back
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    const input = document.getElementById('ideaInput');
+    const micBtn = document.getElementById('micBtn');
+    const status = document.getElementById('voiceStatus');
+    let finalTranscript = input.value;
+
+    recognition.onstart = () => {
+        isRecording = true;
+        micBtn.classList.add('recording');
+        status.textContent = '🎙 Listening...';
+    };
+
+    recognition.onresult = (e) => {
+        let interim = '';
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+            if (e.results[i].isFinal) {
+                finalTranscript += (finalTranscript ? ' ' : '') + e.results[i][0].transcript;
+            } else {
+                interim += e.results[i][0].transcript;
+            }
+        }
+        input.value = finalTranscript + (interim ? ' ' + interim : '');
+    };
+
+    recognition.onerror = (e) => {
+        if (e.error === 'not-allowed') {
+            status.textContent = 'Microphone access denied';
+        } else if (e.error !== 'aborted') {
+            status.textContent = 'Error: ' + e.error;
+        }
+        setTimeout(() => { status.textContent = ''; }, 3000);
+        stopVoice();
+    };
+
+    recognition.onend = () => {
+        if (isRecording) {
+            // Auto-restart if still recording (handles iOS timeout)
+            try { recognition.start(); } catch(e) { stopVoice(); }
+        }
+    };
+
+    try {
+        recognition.start();
+    } catch(e) {
+        status.textContent = 'Could not start microphone';
+        setTimeout(() => { status.textContent = ''; }, 3000);
+    }
+}
+
+function stopVoice() {
+    isRecording = false;
+    if (recognition) {
+        try { recognition.stop(); } catch(e) {}
+        recognition = null;
+    }
+    const micBtn = document.getElementById('micBtn');
+    const status = document.getElementById('voiceStatus');
+    if (micBtn) micBtn.classList.remove('recording');
+    if (status) status.textContent = '';
 }
 
 // ── GITHUB SYNC ──
