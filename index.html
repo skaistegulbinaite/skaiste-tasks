@@ -239,6 +239,15 @@
         .copy-btn.copied { background:#4ade80; color:#000; opacity:1; }
         .copy-btn.copied svg { display:none; }
         .copy-btn.copied::after { content:'✓'; font-size:14px; font-weight:700; }
+        .copy-toast {
+            position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(20px);
+            background:#4ade80; color:#000; font-weight:700; font-size:14px;
+            padding:10px 24px; border-radius:12px;
+            box-shadow:0 4px 20px rgba(74,222,128,0.4);
+            opacity:0; transition:all .3s ease; z-index:9999;
+            pointer-events:none;
+        }
+        .copy-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
         .task-footer { display:flex; align-items:center; gap:8px; margin-top:8px; flex-wrap:wrap; }
         .task-tag {
             display:flex; align-items:center; gap:4px;
@@ -506,6 +515,7 @@
 <div class="ideas-view" id="ideasView"></div>
 
 <button class="add-btn" id="addBtn" onclick="handleAddBtn()">+</button>
+<div class="copy-toast" id="copyToast">✓ Copied!</div>
 
 <div class="modal-overlay" id="addModal">
     <div class="modal-spacer" onclick="closeAddTask()"></div>
@@ -904,22 +914,68 @@ function renderDayView() {
 // ── COPY TO CLIPBOARD ──
 function copyText(btn, taskId) {
     const task = tasks.find(t => t.id === taskId);
-    if (!task || !task.copyText) return;
-    navigator.clipboard.writeText(task.copyText).then(() => {
-        btn.classList.add('copied');
-        if (navigator.vibrate) navigator.vibrate(30);
-        setTimeout(() => btn.classList.remove('copied'), 1500);
-    }).catch(() => {
-        // Fallback for older browsers
-        const ta = document.createElement('textarea');
-        ta.value = task.copyText;
-        document.body.appendChild(ta);
-        ta.select();
+    if (!task || !task.copyText) { console.log('No copyText for', taskId); return; }
+
+    const text = task.copyText;
+    let success = false;
+
+    // Method 1: Modern clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            showCopied(btn);
+        }).catch(() => {
+            // If clipboard API fails, try fallback
+            fallbackCopy(text, btn);
+        });
+        return;
+    }
+
+    // Method 2: Fallback for iOS Safari
+    fallbackCopy(text, btn);
+}
+
+function fallbackCopy(text, btn) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    ta.style.top = '0';
+    ta.style.opacity = '0';
+    ta.setAttribute('readonly', '');
+    document.body.appendChild(ta);
+
+    // iOS specific
+    const range = document.createRange();
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+
+    ta.contentEditable = true;
+    ta.readOnly = false;
+
+    range.selectNodeContents(ta);
+    sel.addRange(range);
+    ta.setSelectionRange(0, text.length);
+
+    try {
         document.execCommand('copy');
-        document.body.removeChild(ta);
-        btn.classList.add('copied');
-        setTimeout(() => btn.classList.remove('copied'), 1500);
-    });
+        showCopied(btn);
+    } catch(e) {
+        console.log('Copy failed', e);
+    }
+    document.body.removeChild(ta);
+}
+
+function showCopied(btn) {
+    btn.classList.add('copied');
+    if (navigator.vibrate) navigator.vibrate(30);
+
+    // Show toast
+    const toast = document.getElementById('copyToast');
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+        btn.classList.remove('copied');
+    }, 1500);
 }
 
 // Smart scheduling: group tasks by project, keeping done at bottom
