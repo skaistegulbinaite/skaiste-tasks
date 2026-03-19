@@ -110,7 +110,7 @@
     {"id":"l05","date":"2026-04-17","project":"course","title":"Learning: Email marketing tactics","desc":"30min — how to write emails that sell, subject lines, segmentation. Your best channel (70% of sales)","type":"learn","duration":30,"device":"computer","priority":1},
     {"id":"l06","date":"2026-04-24","project":"course","title":"Learning: Course creation best practices","desc":"30min — how top course creators structure content, pricing psychology, launch strategies","type":"learn","duration":30,"device":"computer","priority":1},
 
-    {"id":"p01","date":"2026-03-25","project":"photo","title":"Retouch + send: Eiminta (28), Amanda (10), Simona (22)","desc":"60 photos total ~1.5h. Photos return Mar 24. Retouch small fixes + send via WeTransfer","type":"retouch","duration":90,"device":"computer","priority":3},
+    {"id":"p01","date":"2026-03-25","project":"photo","title":"Retouch + send: Eiminta (28), Simona (22)","desc":"50 photos total ~1h 15min. Photos return Mar 24. Amanda & Skaiste DONE ✅","type":"retouch","duration":75,"device":"computer","priority":3},
     {"id":"p02","date":"2026-03-26","project":"photo","title":"Retouch + send: Vilija (15), Ilona (23)","desc":"38 photos total ~57min. Photos return Mar 25","type":"retouch","duration":60,"device":"computer","priority":3},
     {"id":"p03","date":"2026-04-02","project":"photo","title":"Retouch + send: Deira (27), Zivile (3)","desc":"30 photos total ~45min. Photos return Apr 1","type":"retouch","duration":45,"device":"computer","priority":3},
     {"id":"p04","date":"2026-04-03","project":"photo","title":"Retouch + send: Inesa (18), Rasa (30)","desc":"48 photos total ~1h 12min. Photos return Apr 2","type":"retouch","duration":72,"device":"computer","priority":3},
@@ -131,9 +131,13 @@
     {"id":"p18","date":"2026-04-29","project":"photo","title":"Post portfolio photo on IG","desc":"Tuesday post","type":"ig-post","duration":15,"device":"phone","priority":2},
     {"id":"p19","date":"2026-05-01","project":"photo","title":"Post portfolio photo on IG","desc":"Thursday post","type":"ig-post","duration":15,"device":"phone","priority":2},
 
-    {"id":"p20","date":"2026-04-01","project":"photo","title":"Create + post photography reel","desc":"1st of month reel — behind the scenes, before/after, or posing tips","type":"reel","duration":45,"device":"phone","priority":2},
-    {"id":"p21","date":"2026-04-15","project":"photo","title":"Create + post photography reel","desc":"Mid-month reel — client transformation, studio vibes, or photography tip","type":"reel","duration":45,"device":"phone","priority":2},
-    {"id":"p22","date":"2026-05-01","project":"photo","title":"Create + post photography reel","desc":"May reel — summer is coming, book your photoshoot!","type":"reel","duration":45,"device":"phone","priority":2},
+    {"id":"p32","date":"2026-03-21","project":"photo","title":"Create + post photography reel","desc":"Weekend reel — post tomorrow! Behind the scenes, before/after, or posing tips","type":"reel","duration":45,"device":"phone","priority":3},
+    {"id":"p20","date":"2026-04-01","project":"photo","title":"Create + post photography reel","desc":"Reel 1 — behind the scenes, before/after, or posing tips","type":"reel","duration":45,"device":"phone","priority":2},
+    {"id":"p21","date":"2026-04-10","project":"photo","title":"Create + post photography reel","desc":"Reel 2 — client transformation, studio vibes, or photography tip","type":"reel","duration":45,"device":"phone","priority":2},
+    {"id":"p33","date":"2026-04-21","project":"photo","title":"Create + post photography reel","desc":"Reel 3 — posing tips, workflow, or seasonal content","type":"reel","duration":45,"device":"phone","priority":2},
+    {"id":"p22","date":"2026-05-01","project":"photo","title":"Create + post photography reel","desc":"Reel 1 — summer is coming, book your photoshoot!","type":"reel","duration":45,"device":"phone","priority":2},
+    {"id":"p34","date":"2026-05-11","project":"photo","title":"Create + post photography reel","desc":"Reel 2 — client story, before/after transformation","type":"reel","duration":45,"device":"phone","priority":2},
+    {"id":"p35","date":"2026-05-21","project":"photo","title":"Create + post photography reel","desc":"Reel 3 — Kaunas locations, last chance before Vilnius move","type":"reel","duration":45,"device":"phone","priority":2},
 
     {"id":"p23","date":"2026-03-27","project":"photo","title":"IG stories — Q&A or testimonials","desc":"Do a Q&A box or share client testimonials on stories","type":"stories","duration":20,"device":"phone","priority":1},
     {"id":"p24","date":"2026-04-10","project":"photo","title":"IG stories — Q&A or topic talk","desc":"Talk about something your audience is interested in, or share testimonials","type":"stories","duration":20,"device":"phone","priority":1},
