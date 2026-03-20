@@ -303,16 +303,14 @@
         /* ── EDIT MODAL ── */
         .edit-modal-overlay {
             position:fixed; inset:0; background:rgba(0,0,0,0.5);
-            z-index:9998; opacity:0; transition:opacity .2s;
-            pointer-events:none; display:flex; align-items:center; justify-content:center;
+            z-index:10000; display:none; align-items:center; justify-content:center;
         }
-        .edit-modal-overlay.show { opacity:1; pointer-events:auto; }
+        .edit-modal-overlay.show { display:flex; }
         .edit-modal {
             background:var(--surface1); border-radius:16px;
             padding:24px; width:calc(100% - 40px); max-width:400px;
-            transform:scale(0.9); transition:transform .2s;
+            position:relative; z-index:10001;
         }
-        .edit-modal-overlay.show .edit-modal { transform:scale(1); }
         .edit-modal h3 { margin:0 0 16px; font-size:16px; color:var(--text1); }
         .edit-field { margin-bottom:12px; }
         .edit-field label {
@@ -322,7 +320,14 @@
         .edit-field input, .edit-field select {
             width:100%; padding:10px 12px; border-radius:10px;
             border:1px solid var(--border); background:var(--surface2);
-            color:var(--text1); font-size:14px;
+            color:var(--text1); font-size:16px;
+            -webkit-appearance:none; appearance:none;
+            box-sizing:border-box;
+            -webkit-user-select:auto; user-select:auto;
+            touch-action:manipulation;
+        }
+        .edit-field input:focus, .edit-field select:focus {
+            outline:2px solid var(--accent); border-color:var(--accent);
         }
         .edit-btns { display:flex; gap:8px; margin-top:16px; }
         .edit-btns button {
