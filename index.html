@@ -913,8 +913,8 @@ function renderDayView() {
 
 // ── COPY TO CLIPBOARD ──
 function copyText(btn, taskId) {
-    const task = tasks.find(t => t.id === taskId);
-    if (!task || !task.copyText) { console.log('No copyText for', taskId); return; }
+    const task = DATA.tasks.find(t => t.id === taskId);
+    if (!task || !task.copyText) { console.log('No copyText for', taskId, DATA.tasks.map(t=>t.id)); return; }
 
     const text = task.copyText;
     let success = false;
