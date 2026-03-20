@@ -1078,14 +1078,15 @@ function closeActionSheet() {
 }
 
 function editTaskFromMenu() {
+    const editingTaskId = menuTaskId;
     closeActionSheet();
-    const task = DATA.tasks.find(t => t.id === menuTaskId);
+    const task = DATA.tasks.find(t => t.id === editingTaskId);
     if (!task) return;
     document.getElementById('editTitle').value = task.title;
     document.getElementById('editDate').value = task.date;
     document.getElementById('editPriority').value = task.priority || 2;
     document.getElementById('editDuration').value = task.duration || 30;
-    document.getElementById('editModal').dataset.taskId = menuTaskId;
+    document.getElementById('editModal').dataset.taskId = editingTaskId;
     setTimeout(() => {
         document.getElementById('editModal').classList.add('show');
     }, 200);
