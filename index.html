@@ -880,11 +880,16 @@ function renderHeader() {
     document.getElementById('headerDate').textContent = LT_MONTHS[t.getMonth()] + ' ' + t.getDate();
     if (!DATA) return;
     const ts = fmt(t);
-    const todayTasks = DATA.tasks.filter(x => x.date === ts);
-    const dc = todayTasks.filter(x => doneIds[x.id]).length;
+    const todayLeft = DATA.tasks.filter(x => x.date === ts && !doneIds[x.id]).length;
+    const dow = (t.getDay() + 6) % 7;
+    const weekStart = new Date(t); weekStart.setDate(t.getDate() - dow);
+    const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 6);
+    const ws = fmt(weekStart), we = fmt(weekEnd);
+    const weekLeft = DATA.tasks.filter(x => x.date >= ws && x.date <= we && !doneIds[x.id]).length;
     const overdue = DATA.tasks.filter(x => x.date < ts && !doneIds[x.id]).length;
     let h = '';
-    if (todayTasks.length) h += `<div class="stat-pill"><span class="num">${dc}/${todayTasks.length}</span></div>`;
+    h += `<div class="stat-pill">${icon('calendar',11)} <span class="num">${todayLeft}</span> today</div>`;
+    h += `<div class="stat-pill">${icon('calendar',11)} <span class="num">${weekLeft}</span> week</div>`;
     if (overdue) h += `<div class="stat-pill overdue"><span class="num">${overdue}</span> overdue</div>`;
     document.getElementById('headerStats').innerHTML = h;
 }
