@@ -1398,6 +1398,7 @@ function deleteIdea(id) {
 // ── VOICE RECORDING ──
 let recognition = null;
 let isRecording = false;
+let wakeLock = null;
 const MIC_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>';
 const STOP_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
 
@@ -1434,8 +1435,11 @@ function toggleVoice() {
         micBtn.innerHTML = STOP_SVG;
         status.textContent = '● Recording...';
         status.classList.add('active');
-        // Vibrate on phones that support it
         if (navigator.vibrate) navigator.vibrate(50);
+        // Keep screen awake while recording (for driving)
+        if (navigator.wakeLock) {
+            navigator.wakeLock.request('screen').then(l => { wakeLock = l; }).catch(() => {});
+        }
     };
 
     recognition.onresult = (e) => {
@@ -1470,11 +1474,9 @@ function toggleVoice() {
     };
 
     recognition.onend = () => {
-        if (isRecording && restartCount < 10) {
+        if (isRecording) {
             restartCount++;
             try { recognition.start(); } catch(e) { stopVoice(); }
-        } else if (isRecording) {
-            stopVoice();
         }
     };
 
@@ -1492,6 +1494,16 @@ function stopVoice() {
     if (recognition) {
         try { recognition.stop(); } catch(e) {}
         recognition = null;
+    }
+    // Release wake lock
+    if (wakeLock) {
+        try { wakeLock.release(); } catch(e) {}
+        wakeLock = null;
+    }
+    // Auto-save if there's text
+    const input = document.getElementById('ideaInput');
+    if (input && input.value.trim()) {
+        saveIdea();
     }
     const micBtn = document.getElementById('micBtn');
     const status = document.getElementById('voiceStatus');
