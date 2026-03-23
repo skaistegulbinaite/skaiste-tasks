@@ -1276,19 +1276,24 @@ function renderProjectsView() {
     if (!DATA) return;
     const todayStr = fmt(new Date());
 
-    const allRemain = DATA.tasks.filter(t => !doneIds[t.id]);
-    const phoneT = allRemain.filter(t => t.device === 'phone').length;
-    const compT = allRemain.filter(t => t.device === 'computer').length;
-    const totalH = Math.round(allRemain.reduce((s,t) => s + (t.duration||0), 0) / 60);
+    const today = new Date();
+    const dow = (today.getDay() + 6) % 7;
+    const weekStart = new Date(today); weekStart.setDate(today.getDate() - dow);
+    const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 6);
+    const ws = fmt(weekStart), we = fmt(weekEnd);
+    const weekTasks = DATA.tasks.filter(t => t.date >= ws && t.date <= we && !doneIds[t.id]);
+    const phoneT = weekTasks.filter(t => t.device === 'phone').length;
+    const compT = weekTasks.filter(t => t.device === 'computer').length;
+    const totalH = Math.round(weekTasks.reduce((s,t) => s + (t.duration||0), 0) / 60);
 
-    let html = `<div class="section-title">Overview</div>
+    let html = `<div class="section-title">This week</div>
     <div class="summary-grid">
         <div class="summary-card">
             <div class="sc-label">Tasks left</div>
-            <div class="sc-value">${allRemain.length}</div>
+            <div class="sc-value">${weekTasks.length}</div>
         </div>
         <div class="summary-card">
-            <div class="sc-label">Total work</div>
+            <div class="sc-label">Work left</div>
             <div class="sc-value">${totalH}h</div>
         </div>
         <div class="summary-card">
@@ -1303,24 +1308,24 @@ function renderProjectsView() {
     <div class="section-title">Projects</div>`;
 
     Object.entries(DATA.projects).forEach(([key, proj]) => {
-        const tasks = DATA.tasks.filter(t => t.project === key);
-        const done = tasks.filter(t => doneIds[t.id]).length;
-        const total = tasks.length;
-        const pct = total ? Math.round(done/total*100) : 0;
-        const upcoming = tasks.filter(t => t.date >= todayStr && !doneIds[t.id]).length;
-        const overdue = tasks.filter(t => t.date < todayStr && !doneIds[t.id]).length;
-        const totalMin = tasks.filter(t => !doneIds[t.id]).reduce((s,t) => s + (t.duration||0), 0);
+        const projWeek = DATA.tasks.filter(t => t.project === key && t.date >= ws && t.date <= we);
+        const projDone = projWeek.filter(t => doneIds[t.id]).length;
+        const projTotal = projWeek.length;
+        const pct = projTotal ? Math.round(projDone/projTotal*100) : 0;
+        const projLeft = projTotal - projDone;
+        const overdue = DATA.tasks.filter(t => t.project === key && t.date < todayStr && !doneIds[t.id]).length;
+        const projMin = projWeek.filter(t => !doneIds[t.id]).reduce((s,t) => s + (t.duration||0), 0);
 
         html += `<div class="project-card" style="border-left:4px solid ${proj.color}" onclick="filterByProject('${key}')">
             <div class="project-header">
                 <div class="project-name"><span class="p-dot" style="background:${proj.color}"></span>${proj.name}</div>
-                <div class="project-count">${done}/${total}</div>
+                <div class="project-count">${projDone}/${projTotal}</div>
             </div>
             <div class="project-bar"><div class="project-bar-fill" style="width:${pct}%;background:${proj.color}"></div></div>
             <div class="project-stats">
-                <div class="project-stat"><strong>${upcoming}</strong> left</div>
+                <div class="project-stat"><strong>${projLeft}</strong> left</div>
                 ${overdue ? `<div class="project-stat" style="color:#e05555"><strong>${overdue}</strong> overdue</div>` : ''}
-                <div class="project-stat"><strong>${fmtTime(totalMin)}</strong> work</div>
+                <div class="project-stat"><strong>${fmtTime(projMin)}</strong> work</div>
             </div>
         </div>`;
     });
