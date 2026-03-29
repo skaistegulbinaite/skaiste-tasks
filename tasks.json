@@ -1515,6 +1515,56 @@
       "duration": 15,
       "completed": false,
       "description": "STORY 1 (informacinis):\nJau bandete musu SchofruLade is RIMI? Kuris skonis jusu megstamiausias? Avietes+bananai, vysnia ar ananasai? Balsuokite!\n\nSTORY 2 (kur isigyti):\nRIMI ledu akcija — SchofruLade 3 skoniai. Uzsukite i artimiausia RIMI! Visa kolekcija: www.beribu.lt"
+    },
+    {
+      "id": "r26",
+      "title": "Voiceover ant parodomojo video TikTok'ui",
+      "date": "2026-03-30",
+      "project": "retouchlab",
+      "type": "social",
+      "duration": 30,
+      "completed": false,
+      "description": "Padaryt voiceover ant parodomojo plugin video ir sukelti i TikTok."
+    },
+    {
+      "id": "r27",
+      "title": "Papostinti fotke su Ruta (reach boost)",
+      "date": "2026-03-30",
+      "project": "retouchlab",
+      "type": "social",
+      "duration": 15,
+      "completed": false,
+      "description": "Papostinti bendra nuotrauka su Ruta Instagram'e kad pakeltu reach pries launch'a."
+    },
+    {
+      "id": "r28",
+      "title": "Issiusti zinutes fotografams — nemokamas plug in kodas",
+      "date": "2026-03-30",
+      "project": "retouchlab",
+      "type": "outreach",
+      "duration": 30,
+      "completed": false,
+      "description": "Issiusti paruostas zinutes fotografams su pasiulymu nemokamai isbandyti RetouchLab Skin Pro. Paprasyti atsiliepimo ir story pasidalinimo jei patiks."
+    },
+    {
+      "id": "r29",
+      "title": "Issiusti zinutes brandam/studijoms/foto parduotuvem",
+      "date": "2026-03-30",
+      "project": "retouchlab",
+      "type": "outreach",
+      "duration": 30,
+      "completed": false,
+      "description": "Issiusti zinutes fotostudijoms ir brandam su pasiulymu padovanoti plug in ju sekejams per konkursa. Prideti video ir medziaga."
+    },
+    {
+      "id": "r30",
+      "title": "Research: kaip Claude Code gali padeti su Meta reklamomis",
+      "date": "2026-03-30",
+      "project": "retouchlab",
+      "type": "research",
+      "duration": 30,
+      "completed": false,
+      "description": "Issiaiskinti kaip Claude Code gali padeti kurti, optimizuoti ir valdyti Meta (Facebook/Instagram) reklamas RetouchLab plug in'ui."
     }
   ]
 }
