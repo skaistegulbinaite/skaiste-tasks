@@ -475,17 +475,6 @@
       "priority": 2
     },
     {
-      "id": "p32",
-      "date": "2026-03-21",
-      "project": "photo",
-      "title": "Create + post photography reel",
-      "desc": "Weekend reel — post tomorrow! Behind the scenes, before/after, or posing tips",
-      "type": "reel",
-      "duration": 45,
-      "device": "phone",
-      "priority": 3
-    },
-    {
       "id": "p20",
       "date": "2026-04-02",
       "project": "photo",
@@ -1626,24 +1615,13 @@
       "priority": 3
     },
     {
-      "id": "r200",
-      "date": "2026-04-26",
-      "project": "retouchlab",
-      "title": "🧰 Weekend prep — get everything ready for launch week",
-      "desc": "Do everything now so Mon-Wed is pure doing, no thinking:\n• Check American e-sim is working on your 2nd phone (go to whatismyip.com — should say United States)\n• Write an English TikTok bio, short (80 characters), with a hook + link\n• Pick 3 American TikTok accounts you like the style of — to copy the vibe\n• Write down 9 Instagram post ideas (before/afters, AI vs your plugin, what it does, customer reviews)\n• Write down 5 topics for meme-style Instagram stories (things that waste photographers' time)\n• Pull 10 of your best before/after pictures into one folder\n• Pick colors + 2 fonts for the free PDF you'll make Wednesday",
-      "type": "task",
-      "duration": 150,
-      "device": "phone",
-      "priority": 3
-    },
-    {
       "id": "r201",
       "date": "2026-04-27",
       "project": "retouchlab",
       "title": "🔧 Set up the American TikTok account @tryretouchlab",
-      "desc": "This must be done BEFORE filming or posting anything. The whole week depends on it.\n• Put the American e-sim in your 2nd phone, check it shows a US location\n• Delete + reinstall TikTok on that phone (fresh install)\n• Create @tryretouchlab (use a new email, NOT your Lithuanian one)\n• Paste in the English bio you wrote on weekend\n• Upload a profile pic that matches your Instagram\n• Add the link to retouchlab.com\n• Follow 20 American portrait/wedding photographer accounts — this warms up your feed",
+      "desc": "FIRST (before everything else, 15 min):\n• Check your American e-sim is working (whatismyip.com should say United States)\n• Write a short English TikTok bio — 80 characters max, hook + link\n• Pick 3 American TikTok accounts you like the style of\n\nTHEN — account setup:\nThis must be done BEFORE filming or posting anything. The whole week depends on it.\n• Put the American e-sim in your 2nd phone, check it shows a US location\n• Delete + reinstall TikTok on that phone (fresh install)\n• Create @tryretouchlab (use a new email, NOT your Lithuanian one)\n• Paste in the English bio you wrote on weekend\n• Upload a profile pic that matches your Instagram\n• Add the link to retouchlab.com\n• Follow 20 American portrait/wedding photographer accounts — this warms up your feed",
       "type": "task",
-      "duration": 90,
+      "duration": 105,
       "device": "computer",
       "priority": 3
     },
@@ -1652,9 +1630,9 @@
       "date": "2026-04-27",
       "project": "retouchlab",
       "title": "🎬 Film 3 TikToks, post them, turn off Meta ads",
-      "desc": "Now that the US account exists, make content for it.\n• Film video #1 — Before/after reveal (30 seconds) using one of your prepped pictures\n• Film video #2 — 'Skin retouching in 1 click' demo (45 seconds)\n• Film video #3 — You talking as a photographer who tried it (30 seconds)\n• Edit all 3 in CapCut — add English captions, text on screen, American hashtags\n• Post video #1 on @tryretouchlab\n• Also post video #1 on your personal Lithuanian TikTok, framed as 'I'm a photographer and I tried this plugin'\n• Schedule video #2 for Tuesday and video #3 for Wednesday\n• Reply to the first 20 comments on the US post (TikTok rewards fast replies)\n• Open Meta ads, pause everything — you're done with Meta. Save the money for TikTok ads later.\n• Write down: Klaviyo list size today (49) + TikTok follower counts. This is your Week 1 baseline.",
+      "desc": "FIRST (10 min): Pull your 10 best before/after images into one folder — you'll use them today + all week.\n\nNow that the US account exists, make content for it.\n• Film video #1 — Before/after reveal (30 seconds) using one of your prepped pictures\n• Film video #2 — 'Skin retouching in 1 click' demo (45 seconds)\n• Film video #3 — You talking as a photographer who tried it (30 seconds)\n• Edit all 3 in CapCut — add English captions, text on screen, American hashtags\n• Post video #1 on @tryretouchlab\n• Also post video #1 on your personal Lithuanian TikTok, framed as 'I'm a photographer and I tried this plugin'\n• Schedule video #2 for Tuesday and video #3 for Wednesday\n• Reply to the first 20 comments on the US post (TikTok rewards fast replies)\n• Open Meta ads, pause everything — you're done with Meta. Save the money for TikTok ads later.\n• Write down: Klaviyo list size today (49) + TikTok follower counts. This is your Week 1 baseline.",
       "type": "task",
-      "duration": 270,
+      "duration": 280,
       "device": "computer",
       "priority": 3
     },
@@ -1674,9 +1652,9 @@
       "date": "2026-04-29",
       "project": "retouchlab",
       "title": "🎁 Build affiliate pack + free PDF signup system",
-      "desc": "Two big builds today — both become 'set and forget' systems.\n\nMORNING — AFFILIATE PACK (for the people who sell your plugin) (2h):\nMake a Google Drive folder called 'RetouchLab Affiliate Kit' with:\n• 10 ready-to-copy Instagram captions they can use\n• 3 reel hook templates (like 'POV: I just tried…' or 'The moment I realized…')\n• 5 Instagram story templates with the text overlays already designed\n• 3 email templates (first intro, reminder, customer story)\n• Brand pack — your logo, color codes, font names\n• 1-page instructions — 'here's how to post and get credit for sales'\n\nMIDDAY — FREE PDF (to grow your email list) (2.5h):\nMake the PDF in Canva: '5 Photoshop Shortcuts That Save Portrait Retouchers 2 Hours a Day'\n• Cover page (title)\n• Intro page (Hi, I'm Skaistė…)\n• Shortcut #1 with picture example\n• Shortcut #2, #3, #4, #5 (one page each)\n• Last page — 'Want to save 90% of retouching time? Try RetouchLab →' with a link\n• Export as PDF\n\nAFTERNOON — HOOK IT ALL UP (1.5h):\n• Upload the PDF to Klaviyo\n• Set up a Klaviyo flow so when someone signs up, they automatically get the PDF + are added to your email list\n• Add a signup form on retouchlab.com (pops up when they go to leave, OR at the bottom)\n• Test it yourself: sign up with a fake email, make sure the PDF arrives\n• Change your Instagram bio link to 'Free: 5 Photoshop Shortcuts'\n• Change both TikTok bio links to the same thing\n\nEND OF DAY — Email the 3 existing affiliates with the kit link + ask each to post once by Friday.",
+      "desc": "FIRST (10 min): Pick 2 fonts + your brand colors for the PDF (just decide — don't design yet).\n\nTwo big builds today — both become 'set and forget' systems.\n\nMORNING — AFFILIATE PACK (for the people who sell your plugin) (2h):\nMake a Google Drive folder called 'RetouchLab Affiliate Kit' with:\n• 10 ready-to-copy Instagram captions they can use\n• 3 reel hook templates (like 'POV: I just tried…' or 'The moment I realized…')\n• 5 Instagram story templates with the text overlays already designed\n• 3 email templates (first intro, reminder, customer story)\n• Brand pack — your logo, color codes, font names\n• 1-page instructions — 'here's how to post and get credit for sales'\n\nMIDDAY — FREE PDF (to grow your email list) (2.5h):\nMake the PDF in Canva: '5 Photoshop Shortcuts That Save Portrait Retouchers 2 Hours a Day'\n• Cover page (title)\n• Intro page (Hi, I'm Skaistė…)\n• Shortcut #1 with picture example\n• Shortcut #2, #3, #4, #5 (one page each)\n• Last page — 'Want to save 90% of retouching time? Try RetouchLab →' with a link\n• Export as PDF\n\nAFTERNOON — HOOK IT ALL UP (1.5h):\n• Upload the PDF to Klaviyo\n• Set up a Klaviyo flow so when someone signs up, they automatically get the PDF + are added to your email list\n• Add a signup form on retouchlab.com (pops up when they go to leave, OR at the bottom)\n• Test it yourself: sign up with a fake email, make sure the PDF arrives\n• Change your Instagram bio link to 'Free: 5 Photoshop Shortcuts'\n• Change both TikTok bio links to the same thing\n\nEND OF DAY — Email the 3 existing affiliates with the kit link + ask each to post once by Friday.",
       "type": "task",
-      "duration": 420,
+      "duration": 430,
       "device": "computer",
       "priority": 3
     },
@@ -1685,9 +1663,9 @@
       "date": "2026-04-30",
       "project": "retouchlab",
       "title": "🌐 Switch Instagram to English — set up the look before posting English content",
-      "desc": "Light task between shoots today. This must be done BEFORE the English stories and posts start.\n• Rewrite your Instagram bio in English (use your TikTok bio as a base)\n• Redesign 3 highlight covers in Canva using your brand colors\n• Pin 2 English posts at the top of your feed — pick from your 9 post ideas (recommend: a before/after post + an 'AI vs RetouchLab' post)\n• Post your first pain-point meme story (numbered format, like '3 things wedding photographers waste 2 hours on — here's how to kill them'). Use one of your 5 topics.",
+      "desc": "FIRST (10 min): Brain-dump 9 Instagram post ideas (before/afters, AI vs RL, features, testimonials) AND 5 meme-story topics (things that waste photographers' time). You'll pull from these now and all next week.\n\nLight task between shoots today. This must be done BEFORE the English stories and posts start.\n• Rewrite your Instagram bio in English (use your TikTok bio as a base)\n• Redesign 3 highlight covers in Canva using your brand colors\n• Pin 2 English posts at the top of your feed — pick from your 9 post ideas (recommend: a before/after post + an 'AI vs RetouchLab' post)\n• Post your first pain-point meme story (numbered format, like '3 things wedding photographers waste 2 hours on — here's how to kill them'). Use one of your 5 topics.",
       "type": "task",
-      "duration": 45,
+      "duration": 55,
       "device": "phone",
       "priority": 2
     },
