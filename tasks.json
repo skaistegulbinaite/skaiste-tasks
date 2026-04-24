@@ -1624,6 +1624,138 @@
       "duration": 60,
       "device": "computer",
       "priority": 3
+    },
+    {
+      "id": "r200",
+      "date": "2026-04-26",
+      "project": "retouchlab",
+      "title": "🧰 Weekend prep for US launch week",
+      "desc": "All prep so Mon-Wed is pure execution:\n• Verify US e-sim active on 2nd device (whatismyip.com = US)\n• Draft 80-char English TikTok bio\n• Pick 3 reference TikTok accounts for @tryretouchlab style\n• List 9 IG feed post concepts (before/afters, AI vs RL, features, testimonials)\n• List 5 pain-point meme story topics\n• Pull 10 best before/after images into a folder\n• Pick Canva brand colors + 2 fonts",
+      "type": "task",
+      "duration": 150,
+      "device": "phone",
+      "priority": 3
+    },
+    {
+      "id": "r201",
+      "date": "2026-04-27",
+      "project": "retouchlab",
+      "title": "🔧 Fix/set up @tryretouchlab US TikTok account",
+      "desc": "PREREQ for all US TikTok posting. Must be done before filming.\n• Insert US e-sim into 2nd device, verify US IP\n• Fresh install TikTok on that device\n• Create @tryretouchlab via US IP (new email, not tied to LT account)\n• Paste English bio from weekend draft\n• Upload profile pic matching IG branding\n• Add site link\n• Follow 20 reference US photographer accounts to warm feed",
+      "type": "task",
+      "duration": 90,
+      "device": "computer",
+      "priority": 3
+    },
+    {
+      "id": "r202",
+      "date": "2026-04-27",
+      "project": "retouchlab",
+      "title": "🎬 Film + post first TikToks on both accounts + kill Meta",
+      "desc": "Uses the US account from prev task.\n• Film #1 Before/after reveal (30s)\n• Film #2 Skin retouching demo (45s)\n• Film #3 Photographer POV testimonial (30s)\n• Edit all in CapCut with English captions + US hashtags\n• Post #1 on @tryretouchlab (US)\n• Mirror #1 to personal LT with photographer POV framing\n• Pre-schedule #2 for Tue, #3 for Wed\n• Reply to first 20 comments on US post\n• Pause ALL Meta ads campaigns — save the budget\n• Note Klaviyo count (49) + TikTok followers as Week 1 baseline",
+      "type": "task",
+      "duration": 270,
+      "device": "computer",
+      "priority": 3
+    },
+    {
+      "id": "r203",
+      "date": "2026-04-28",
+      "project": "retouchlab",
+      "title": "📧 Run full US influencer email outreach — 50 emails",
+      "desc": "• Use retouchlab-influencer-research skill: US portrait/wedding photographers, 10-50k followers\n• Export to Google Sheet + add 20 manual IG/hashtag finds\n• Use Hunter.io / site contact pages to fill missing emails (target 50 with emails)\n• Write outreach email template (intro + value prop + 20% affiliate + access link)\n• A/B test 3 subject lines\n• Send from hello@retouchlab.com\n• Send 25 before lunch, 25 after — personalize opening line only\n• Log every send in the sheet\nEvening: confirm pre-scheduled TikTok #2 live, reply to comments",
+      "type": "task",
+      "duration": 360,
+      "device": "computer",
+      "priority": 3
+    },
+    {
+      "id": "r204",
+      "date": "2026-04-29",
+      "project": "retouchlab",
+      "title": "🎁 Build affiliate kit + lead magnet system",
+      "desc": "Two-part build day — both systems go live today.\n\n(1) AFFILIATE ENABLEMENT KIT (Google Drive folder):\n• 10 ready-to-post IG captions (testimonial, before/after, feature)\n• 3 reel hook templates\n• 5 story swipe-up templates + PNG overlays\n• 3 email templates (intro, reminder, case study)\n• Brand kit — logo, hex codes, fonts\n• 1-page affiliate guide\n\n(2) LEAD MAGNET FUNNEL:\n• Build \"5 Photoshop Shortcuts That Save Portrait Retouchers 2 Hrs/Day\" PDF in Canva (cover + intro + 5 shortcuts + CTA page)\n• Upload to Klaviyo, build auto-delivery flow (signup → PDF + subscribe to RL list)\n• Add signup form on retouchlab.com (exit-intent OR footer)\n• Self-test with dummy email\n• Swap IG + TikTok bio links → \"Free: 5 Photoshop Shortcuts\"\n\n(3) Email kit to the 3 existing affiliates — ask each for 1 post by Friday",
+      "type": "task",
+      "duration": 420,
+      "device": "computer",
+      "priority": 3
+    },
+    {
+      "id": "r205",
+      "date": "2026-04-30",
+      "project": "retouchlab",
+      "title": "🌐 Fix Instagram feed for English/US audience",
+      "desc": "PREREQ for any IG English content going forward. Do between shoots today.\n• Rewrite IG bio in English (use TikTok bio as base)\n• Redesign 3 highlight covers in Canva with brand kit\n• Pin 2 English posts at top of feed (pick from your 9 concepts)\n• Post pain-point meme story #1 (numbered format — use one of your 5 topics)",
+      "type": "task",
+      "duration": 45,
+      "device": "phone",
+      "priority": 2
+    },
+    {
+      "id": "r206",
+      "date": "2026-05-01",
+      "project": "retouchlab",
+      "title": "📊 Week 1 close — story + metrics review",
+      "desc": "• Pain-point meme story #2 (second topic from your list)\n• Post TikTok #4 (from filmed batch) on both accounts\n• Check Klaviyo signups — target: 75+ (was 49)\n• Check US TikTok followers — target: 100+\n• Fill Week 1 metrics sheet: followers · posts · Klaviyo · stories · emails sent · affiliate posts · Meta ads spend",
+      "type": "task",
+      "duration": 45,
+      "device": "phone",
+      "priority": 2
+    },
+    {
+      "id": "r207",
+      "date": "2026-05-04",
+      "project": "retouchlab",
+      "title": "🎬 Film 3 voiceover reels with VA audio",
+      "desc": "VA should have delivered scripts by today.\n• Review voice quality, request re-records if needed\n• Film 3 reels using VA audio + retouching footage\n• Edit in CapCut\n• Post reel #1 on US TikTok + IG today\n• Pre-schedule #2 + #3 for Tue/Wed",
+      "type": "task",
+      "duration": 360,
+      "device": "computer",
+      "priority": 3
+    },
+    {
+      "id": "r208",
+      "date": "2026-05-05",
+      "project": "retouchlab",
+      "title": "💰 Launch TikTok Spark Ads test + hire 5 UGC creators",
+      "desc": "• Pick Week 1's best organic TikTok post (views, shares, comments)\n• Boost as Spark Ad: $10/day × 3 days = $30 test\n• Set up Insense (preferred) OR Billo account\n• Write UGC creator brief: US female photographers, 3 videos each, 30-day ad usage rights, €50-80/video\n• Message 7 US creators — total budget €300",
+      "type": "task",
+      "duration": 240,
+      "device": "computer",
+      "priority": 3
+    },
+    {
+      "id": "r209",
+      "date": "2026-05-06",
+      "project": "retouchlab",
+      "title": "📱 Post VO reel #3 + 10 cold email follow-ups",
+      "desc": "Shoot day, light RL.\n• Confirm reel #3 posted\n• Send follow-ups to 10 Week 1 influencers who didn't reply\n• Reply to TikTok comments",
+      "type": "task",
+      "duration": 30,
+      "device": "phone",
+      "priority": 2
+    },
+    {
+      "id": "r210",
+      "date": "2026-05-07",
+      "project": "retouchlab",
+      "title": "📌 Expand to Pinterest + YouTube Shorts + outreach batch #2",
+      "desc": "• Create Pinterest account (4 boards: Before/Afters · PS Tips · AI vs Manual · Portrait Retouching)\n• Upload 20 before/after pins linking to site\n• Create YouTube Shorts channel, cross-post all Week 1 TikToks\n• Research + send 50 more US influencer emails\n• Publish value-first Reddit post on r/postprocessing: \"How I cut my retouching time 3x — the tool I built [OC]\"",
+      "type": "task",
+      "duration": 360,
+      "device": "computer",
+      "priority": 3
+    },
+    {
+      "id": "r211",
+      "date": "2026-05-08",
+      "project": "retouchlab",
+      "title": "📊 Spark Ad day-3 review + pain-point story #3",
+      "desc": "Shoot day, light RL.\n• Pull Spark Ad metrics — decision point: CPA < €25 → continue. CPA > €25 → kill.\n• Post pain-point story #3\n• Reply to DMs",
+      "type": "task",
+      "duration": 30,
+      "device": "phone",
+      "priority": 2
     }
   ]
 }
