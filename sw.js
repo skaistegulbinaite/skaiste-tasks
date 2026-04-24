@@ -1,4 +1,4 @@
-const CACHE_NAME = 'skaiste-tasks-v2';
+const CACHE_NAME = 'skaiste-tasks-v3';
 const ASSETS = ['index.html', 'tasks.json', 'manifest.json'];
 
 self.addEventListener('install', e => {
